@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="spideracmer:war">
+    <output-path>$PROJECT_DIR$/spideracmer/target</output-path>
+    <root id="archive" name="spideracmer-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="spideracmer:war exploded" />
+    </root>
+  </artifact>
+</component>

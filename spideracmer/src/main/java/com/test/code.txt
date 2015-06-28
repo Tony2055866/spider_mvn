@@ -1,0 +1,70 @@
+// 基数排序：稳定排序
+   2: public class RadixSorting {
+   3:  
+   4:     // d为数据长度
+   5:     private static void radixSorting(int[] arr, int d) {        
+   6:         //arr = countingSort(arr, 0);
+   7:         for (int i = 0; i < d; i++) {
+   8:             arr = countingSort(arr, i); // 依次对各位数字排序（直接用计数排序的变体）
+   9:             print(arr,i+1,d);
+  10:         }
+  11:     }
+  12:     
+  13:     // 把每次按位排序的结果打印出来
+  14:     static void print(int[] arr,int k,int d)
+  15:     {
+  16:         if(k==d)
+  17:             System.out.println("最终排序结果为：");
+  18:         else
+  19:             System.out.println("按第"+k+"位排序后，结果为：");
+  20:         for (int t : arr) {
+  21:             System.out.print(t + " ");
+  22:         }
+  23:         System.out.println();
+  24:     }
+  25:     
+  26:     // 利用计数排序对元素的每一位进行排序
+  27:     private static int[] countingSort(int[] arr, int index) {
+  28:         int k = 9;
+  29:         int[] b = new int[arr.length];
+  30:         int[] c = new int[k + 1]; //这里比较特殊：数的每一位最大数为9        
+  31:  
+  32:         for (int i = 0; i < k; i++) {
+  33:             c[i] = 0;
+  34:         }
+  35:         for (int i = 0; i < arr.length; i++) {
+  36:             int d = getBitData(arr[i], index);
+  37:             c[d]++;
+  38:         }
+  39:         for (int i = 1; i <= k; i++) {
+  40:             c[i] += c[i - 1];
+  41:         }
+  42:         for (int i = arr.length - 1; i >= 0; i--) {
+  43:             int d = getBitData(arr[i], index);
+  44:             b[c[d] - 1] = arr[i];//C[d]-1 就代表小于等于元素d的元素个数，就是d在B的位置
+  45:             c[d]--;
+  46:         }
+  47:         return b;
+  48:     }
+  49:  
+  50:     // 获取data指定位的数
+  51:     private static int getBitData(int data, int index) {
+  52:         while (data != 0 && index > 0) {
+  53:             data /= 10;
+  54:             index--;
+  55:         }
+  56:         return data % 10;
+  57:     }
+  58:  
+  59:     public static void main(String[] args) {
+  60:         // TODO Auto-generated method stub
+  61:         int[] arr = new int[] {326,453,608,835,751,435,704,690,88,79,79};//{ 333, 956, 175, 345, 212, 542, 99, 87 };
+  62:         System.out.println("基数排序前为：");
+  63:         for (int t : arr) {
+  64:             System.out.print(t + " ");
+  65:         }
+  66:         System.out.println();
+  67:         radixSorting(arr, 4);        
+  68:     }
+  69:  
+  70: }
