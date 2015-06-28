@@ -1,0 +1,101 @@
+﻿<dl style="margin:0px 0px 20px; padding:0px; color:rgb(51,51,51); font-family:'MicroSoft Yahei',Helvetica,Arial,Georgia,Simsun; font-size:14px; line-height:25px">
+<p>九度：<a target="_blank" target="_blank" href="http://ac.jobdu.com/problem.php?pid=1526">http://ac.jobdu.com/problem.php?pid=1526</a></p>
+<p></p>
+<dl style="margin:0px 0px 20px; padding:0px; color:rgb(51,51,51); font-family:'MicroSoft Yahei',Helvetica,Arial,Georgia,Simsun; font-size:14px; line-height:25px">
+<dt style="margin:0px 0px 10px; padding:0px; font-size:16px"><strong>题目描述：</strong></dt><dd style="margin:0px; padding:0px">
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px">
+假如已知有n个人和m对好友关系（存于数字r）。如果两个人是直接或间接的好友（好友的好友的好友...），则认为他们属于同一个朋友圈，请写程序求出这n个人里一共有多少个朋友圈。<br>
+假如：n = 5 ， m = 3 ， r = {{1 , 2} , {2 , 3} , {4 , 5}}，表示有5个人，1和2是好友，2和3是好友，4和5是好友，则1、2、3属于一个朋友圈，4、5属于另一个朋友圈，结果为2个朋友圈。</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px">
+</p>
+</dd></dl>
+<dl style="margin:0px 0px 20px; padding:0px; color:rgb(51,51,51); font-family:'MicroSoft Yahei',Helvetica,Arial,Georgia,Simsun; font-size:14px; line-height:25px">
+<dt style="margin:0px 0px 10px; padding:0px; font-size:16px"><strong>输入：</strong></dt><dd style="margin:0px; padding:0px">
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px">
+输入包含多个测试用例，每个测试用例的第一行包含两个正整数 n、m，1=&lt;n，m&lt;=100000。接下来有m行，每行分别输入两个人的编号f，t（1=&lt;f，t&lt;=n），表示f和t是好友。 当n为0时，输入结束，该用例不被处理。</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px">
+</p>
+</dd></dl>
+<dl style="margin:0px 0px 20px; padding:0px; color:rgb(51,51,51); font-family:'MicroSoft Yahei',Helvetica,Arial,Georgia,Simsun; font-size:14px; line-height:25px">
+<dt style="margin:0px 0px 10px; padding:0px; font-size:16px"><strong>输出：</strong></dt><dd style="margin:0px; padding:0px">
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px">
+对应每个测试用例，输出在这n个人里一共有多少个朋友圈。</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px">
+</p>
+</dd></dl>
+<dl style="margin:0px 0px 20px; padding:0px; color:rgb(51,51,51); font-family:'MicroSoft Yahei',Helvetica,Arial,Georgia,Simsun; font-size:14px; line-height:25px">
+<dt style="margin:0px 0px 10px; padding:0px; font-size:16px"><strong>样例输入：</strong></dt><dd style="margin:0px; padding:0px">
+<pre style="white-space:pre-wrap">5 3
+1 2
+2 3
+4 5
+3 3
+1 2
+1 3
+2 3
+0</pre>
+</dd></dl>
+<dl style="margin:0px 0px 20px; padding:0px; color:rgb(51,51,51); font-family:'MicroSoft Yahei',Helvetica,Arial,Georgia,Simsun; font-size:14px; line-height:25px">
+<dt style="margin:0px 0px 10px; padding:0px; font-size:16px"><strong>样例输出：</strong></dt><dd style="margin:0px; padding:0px">
+<pre style="white-space:pre-wrap">2
+1</pre>
+</dd></dl>
+<br>
+<p></p>
+<p></p>
+<pre name="code" class="cpp">#include &lt;stdio.h&gt;
+int n, m, f[100001],i;
+
+int findSet(int x) {
+	int t = x;
+	while (f[x] &gt; 0)
+		x = f[x];
+	while (t != x) { //路径压缩
+		int q = f[t];
+		f[t] = x;
+		t = q;
+	}
+	return x;
+}
+
+void unionSet(int x, int y) {
+	int fx = findSet(x);
+	int fy = findSet(y);
+	if (fx != fy) {
+		n--;
+		int tmp = f[fx] + f[fy];//两个集合个数之和
+		if (f[fx] &lt; f[fy]) {  //大集合 吞并小集合.
+			f[fy] = fx;
+			f[fx] = tmp;
+		} else {
+			f[fx] = fy;
+			f[fy] = tmp;
+		}
+	}
+}
+
+int main() {
+	//freopen(&quot;in.txt&quot;, &quot;r&quot;, stdin);
+	int a,b;
+	while(scanf(&quot;%d&quot;,&amp;n), n) {
+		scanf(&quot;%d&quot;, &amp;m);
+		for( i=1; i&lt;=n; i++)
+		f[i] = -1;
+		for(i=0; i&lt;m; i++) {
+			scanf(&quot;%d %d&quot;, &amp;a,&amp;b);
+			unionSet(a,b);
+		}
+		printf(&quot;%d\n&quot;, n);
+	}
+	return 0;
+}</pre><br>
+<p></p>
+<p><a target="_blank" href="http://www.acmerblog.com/offer-xiaomi-1167.html">http://www.acmerblog.com/offer-xiaomi-1167.html</a><br>
+</p>
+<p><br>
+</p>
+<p><br>
+</p>
+<p><br>
+</p>
+</dl>
