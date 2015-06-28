@@ -4,7 +4,10 @@
   <groupId>com.tong</groupId>
   <artifactId>spideracmer</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <modules>
+    <module>../spideritblog</module>
+  </modules>
+  <packaging>pom</packaging>
 
 
   <dependencies>

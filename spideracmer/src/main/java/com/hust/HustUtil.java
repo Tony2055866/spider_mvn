@@ -40,13 +40,13 @@ public class HustUtil {
 //		System.out.println(test);
 		
 		//System.out.println(getAcCode("HDU", "2773"));
-		/*List<String[]> allKeys = getAllProblems("Jack of All Trades",new String[]{"HDU","2777"});
+		List<String[]> allKeys = getAllProblems("Binary Operation",new String[]{"HDU","3754"});
 //		
 		if(allKeys != null){
 			for(String[] keys:allKeys){
 				System.out.println(keys[0] + " " + keys[1]);
 			}
-		}*/
+		}
 		//returnHustIdNew("hdu", "Math Magic");
 	}
 	
@@ -63,11 +63,24 @@ public class HustUtil {
 
 		// (可选)上下文信息，如果用到session信息的用。
 		HttpContext context = new BasicHttpContext();
-		
-		HttpPost post = new HttpPost("http://acm.hust.edu.cn/vjudge/problem/toListProblem.action?"+
-				"sEcho=3&iColumns=8&sColumns=&iDisplayStart=0&iDisplayLength=25&mDataProp_0=0&mDataProp_1=1&mDataProp_2=2&mDataProp_3=3&mDataProp_4=4&mDataProp_5=5&mDataProp_6=6&mDataProp_7=7&title=" +
-				URLEncoder.encode(title) +
-				"&bRegex=false&sSearch_0=&bRegex_0=false&bSearchable_0=true&sSearch_1=&bRegex_1=false&bSearchable_1=true&sSearch_2=&bRegex_2=false&bSearchable_2=true&sSearch_3=&bRegex_3=false&bSearchable_3=true&sSearch_4=&bRegex_4=false&bSearchable_4=true&sSearch_5=&bRegex_5=false&bSearchable_5=true&sSearch_6=&bRegex_6=false&bSearchable_6=true&sSearch_7=&bRegex_7=false&bSearchable_7=true&iSortCol_0=1&sSortDir_0=asc&iSortingCols=1&bSortable_0=false&bSortable_1=true&bSortable_2=true&bSortable_3=false&bSortable_4=true&bSortable_5=true&bSortable_6=true&bSortable_7=true&OJId=All");
+
+
+
+		String postData = "http://acm.hust.edu.cn/vjudge/problem/listProblem.action?"+
+				"draw=3&columns%5B0%5D%5Bdata%5D=0&columns%5B0%5D%5Bname%5D=&columns%5B0%5D%5Bsearchable%5D=false&" +
+				"columns%5B0%5D%5Borderable%5D=false&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false&" +
+				"columns%5B1%5D%5Bdata%5D=1&columns%5B1%5D%5Bname%5D=&columns%5B1%5D%5Bsearchable%5D=true&columns%5B1%5D%5Borderable%5D=true&" +
+				"columns%5B1%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B1%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B2%5D%5Bdata%5D=2&" +
+				"columns%5B2%5D%5Bname%5D=&columns%5B2%5D%5Bsearchable%5D=true&columns%5B2%5D%5Borderable%5D=true&columns%5B2%5D%5Bsearch%5D%5Bvalue%5D=" +
+				"&columns%5B2%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B3%5D%5Bdata%5D=3&columns%5B3%5D%5Bname%5D=&columns%5B3%5D%5Bsearchable%5D=true&" +
+				"columns%5B3%5D%5Borderable%5D=true&columns%5B3%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B3%5D%5Bsearch%5D%5Bregex%5D=false&" +
+				"columns%5B4%5D%5Bdata%5D=4&columns%5B4%5D%5Bname%5D=&columns%5B4%5D%5Bsearchable%5D=true&columns%5B4%5D%5Borderable%5D=true&" +
+				"columns%5B4%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B4%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B5%5D%5Bdata%5D=5&columns%5B5%5D%5Bname%5D=" +
+				"&columns%5B5%5D%5Bsearchable%5D=true&columns%5B5%5D%5Borderable%5D=true&columns%5B5%5D%5Bsearch%5D%5Bvalue%5D=&" +
+				"columns%5B5%5D%5Bsearch%5D%5Bregex%5D=false&order%5B0%5D%5Bcolumn%5D=3&order%5B0%5D%5Bdir%5D=desc&start=0&length=20&search%5Bvalue%5D=&" +
+				"search%5Bregex%5D=false&OJId=All&probNum=&title="+URLEncoder.encode(title)+"&source=";
+
+		HttpPost post = new HttpPost(postData);
 
 		initPost(post, "application/json, text/javascript, */*; q=0.01", "application/x-www-form-urlencoded");
 		try {
@@ -99,9 +112,9 @@ public class HustUtil {
 					//System.out.println("list.get(2).toString():" + list.get(2).toString());
 					
 					//realId = ((Double) list.get(5)).intValue() + "";
-					String ojId =datas[3];
+					String ojId =datas[1];
 					String oj = datas[0];
-					String curDes = getDes5(realId);
+					String curDes = getDes5(datas[5]);
 					//System.out.println(curDes);
 					if(title.split(" ").length == 1){
 						if(desOrigin.equals(curDes)){
@@ -117,6 +130,11 @@ public class HustUtil {
 			}
 			//System.out.println("Hust的Id:" + realId);
 			EntityUtils.consume(response.getEntity());
+			String ansListString = "";
+			for(String[] tmp:ansList){
+				ansListString += "oj:"+tmp[0]+"," + "id:" + tmp[1] +" ;  ";
+			}
+			logger.info("getAllProblems : " + ansListString);
 			return ansList;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -127,9 +145,12 @@ public class HustUtil {
 	public static String getDes5(String realId){
 		ProblemData pm = getProblemData(realId);
 		//System.out.println(pm.text);
+		logger.info("realId :" + realId);
 		String parseHtml = "<div class=mydivParse>" + pm.text + "</div>";
 		Div div = MyUtil.parseTags(parseHtml, Div.class, "class", "mydivParse").get(0);
-		String ans = div.toPlainTextString().trim().substring(0,20);
+		//logger.info("div.toPlainTextString().trim():" + div.toPlainTextString().trim());
+		String desStr = div.toPlainTextString().trim();
+		String ans = desStr.substring(0, desStr.length() > 20 ? 20 : desStr.length());
 		if(ans.startsWith("h1,h2,h3,h4")){
 			List<ParagraphTag> ps =  MyUtil.parseTags(parseHtml, ParagraphTag.class, null, null);
 			if(ps != null && ps.size() > 0){
@@ -140,7 +161,7 @@ public class HustUtil {
 				}
 			}
 		}
-		return div.toPlainTextString().trim().substring(0,20);
+		return ans;
 	}
 	
 	public static String getOjType(String oj){
@@ -236,7 +257,14 @@ public class HustUtil {
 		
 		return null;
 	}
-	
+
+
+	/**
+	 *
+	 * @param oj
+	 * @param problem 序号，数字
+	 * @return
+	 */
 	public static String returnHustIdNew(String oj,String problem){
 		// cient参数，可选
 		BasicHttpParams httpParams = new BasicHttpParams();
@@ -247,13 +275,25 @@ public class HustUtil {
 
 		// (可选)上下文信息，如果用到session信息的用。
 		HttpContext context = new BasicHttpContext();
-		HttpPost post = new HttpPost("http://acm.hust.edu.cn/vjudge/problem/listProblem.action?"+
-				"draw=1&columns%5B0%5D%5Bdata%5D=0&columns%5B0%5D%5Bname%5D=&columns%5B0%5D%5Bsearchable%5D=false&columns%5B0%5D%5Borderable%5D=false&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B1%5D%5Bdata%5D=1&columns%5B1%5D%5Bname%5D=&columns%5B1%5D%5Bsearchable%5D=true&columns%5B1%5D%5Borderable%5D=true&columns%5B1%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B1%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B2%5D%5Bdata%5D=2&columns%5B2%5D%5Bname%5D=&columns%5B2%5D%5Bsearchable%5D=true&columns%5B2%5D%5Borderable%5D=true&columns%5B2%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B2%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B3%5D%5Bdata%5D=3&columns%5B3%5D%5Bname%5D=&columns%5B3%5D%5Bsearchable%5D=true&columns%5B3%5D%5Borderable%5D=true&columns%5B3%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B3%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B4%5D%5Bdata%5D=4&columns%5B4%5D%5Bname%5D=&columns%5B4%5D%5Bsearchable%5D=true&columns%5B4%5D%5Borderable%5D=true&columns%5B4%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B4%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B5%5D%5Bdata%5D=5&columns%5B5%5D%5Bname%5D=&columns%5B5%5D%5Bsearchable%5D=true&columns%5B5%5D%5Borderable%5D=true&columns%5B5%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B5%5D%5Bsearch%5D%5Bregex%5D=false&order%5B0%5D%5Bcolumn%5D=3&order%5B0%5D%5Bdir%5D=desc&start=0&length=20&search%5Bvalue%5D=&search%5Bregex%5D=false&" +
-				"OJId=" +
-				oj.toUpperCase() +
-				"&probNum=&title=" +
-				URLEncoder.encode(problem) +
-				"&source=");
+
+		String postData = "http://acm.hust.edu.cn/vjudge/problem/listProblem.action?"+
+				"draw=3&columns%5B0%5D%5Bdata%5D=0&columns%5B0%5D%5Bname%5D=&columns%5B0%5D%5Bsearchable%5D=false&" +
+				"columns%5B0%5D%5Borderable%5D=false&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false&" +
+				"columns%5B1%5D%5Bdata%5D=1&columns%5B1%5D%5Bname%5D=&columns%5B1%5D%5Bsearchable%5D=true&columns%5B1%5D%5Borderable%5D=true&" +
+				"columns%5B1%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B1%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B2%5D%5Bdata%5D=2&" +
+				"columns%5B2%5D%5Bname%5D=&columns%5B2%5D%5Bsearchable%5D=true&columns%5B2%5D%5Borderable%5D=true&columns%5B2%5D%5Bsearch%5D%5Bvalue%5D=" +
+				"&columns%5B2%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B3%5D%5Bdata%5D=3&columns%5B3%5D%5Bname%5D=&columns%5B3%5D%5Bsearchable%5D=true&" +
+				"columns%5B3%5D%5Borderable%5D=true&columns%5B3%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B3%5D%5Bsearch%5D%5Bregex%5D=false&" +
+				"columns%5B4%5D%5Bdata%5D=4&columns%5B4%5D%5Bname%5D=&columns%5B4%5D%5Bsearchable%5D=true&columns%5B4%5D%5Borderable%5D=true&" +
+				"columns%5B4%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B4%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B5%5D%5Bdata%5D=5&columns%5B5%5D%5Bname%5D=" +
+				"&columns%5B5%5D%5Bsearchable%5D=true&columns%5B5%5D%5Borderable%5D=true&columns%5B5%5D%5Bsearch%5D%5Bvalue%5D=&" +
+				"columns%5B5%5D%5Bsearch%5D%5Bregex%5D=false&order%5B0%5D%5Bcolumn%5D=3&order%5B0%5D%5Bdir%5D=desc&start=0&length=20&search%5Bvalue%5D=&" +
+				"search%5Bregex%5D=false&OJId=" + oj.toUpperCase() +
+				"&probNum=" +URLEncoder.encode(problem)+
+				"&title=&source=";
+
+		System.out.println(postData);
+		HttpPost post = new HttpPost(postData);
 		initPost(post, "application/json, text/javascript, */*; q=0.01", "application/x-www-form-urlencoded");
 
 		try {
@@ -272,14 +312,16 @@ public class HustUtil {
 			 }else{
 				 return null;
 			 }
+			logger.info("json:" + json);
 			//System.out.println(json);
 			Gson gson = new Gson();
 			Hust hustData = gson.fromJson(json, Hust.class);
 
 			String realId = null;
-			// System.out.println(hustData.getAaData().size());
+			logger.info("hustData.data.size :" + hustData.data[0][2]);
 			for (String[] datas : hustData.data) {
-				if (datas[2].equals(problem))
+
+				if (datas[1].equals(problem))
 					realId = datas[datas.length-3];
 			}
 

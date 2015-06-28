@@ -38,10 +38,10 @@ public class Init {
 				isWindows = true;
 			} else {
 				isWindows = false;
-				baseDownLoad = "/server/acmerblog/img/";
+				baseDownLoad = "/usr/local/acmerblog/img/";
 				host = "http://www.acmerblog.com/";
-				logDir = "/server/logs/spiderlog";
-				ojsourcesDir = "/server/source";
+				logDir = "/usr/local/logs/spiderlog";
+				ojsourcesDir = "/usr/local/source";
 				ojTestUser = 2;
 			}
 		if(noload) return;
