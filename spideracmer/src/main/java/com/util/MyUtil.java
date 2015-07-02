@@ -29,6 +29,8 @@ import org.htmlparser.nodes.TagNode;
 import org.htmlparser.tags.Div;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -41,6 +43,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyUtil {
+
+	static Logger logger = LoggerFactory.getLogger(MyUtil.class);
+
 	public static boolean checkMatchKey(String slug, String key){
 		String[] arr = slug.split("-");
 		for(int i=0; i<arr.length; i++){
@@ -398,6 +403,8 @@ public class MyUtil {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}else{
+			logger.error("not found file : " + Init.ojsourcesDir + File.separatorChar + oj.toUpperCase() + File.separator + pro + ".cpp");
 		}
 		return null;
 	}

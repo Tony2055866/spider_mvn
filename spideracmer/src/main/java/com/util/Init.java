@@ -41,7 +41,7 @@ public class Init {
 				baseDownLoad = "/usr/local/acmerblog/img/";
 				host = "http://www.acmerblog.com/";
 				logDir = "/usr/local/logs/spiderlog";
-				ojsourcesDir = "/usr/local/source";
+				ojsourcesDir = "/usr/local/source/ojsource";
 				ojTestUser = 2;
 			}
 		if(noload) return;

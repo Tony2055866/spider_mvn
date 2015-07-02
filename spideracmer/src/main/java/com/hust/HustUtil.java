@@ -99,7 +99,7 @@ public class HustUtil {
 				 return null;
 			 }
 			List<String[]> ansList = new ArrayList<String[]>();
-			logger.info("json:" +json);
+			//logger.info("json:" +json);
 			///System.out.println("json:" + json);
 			Gson gson = new Gson();
 			Hust hustData = gson.fromJson(json, Hust.class);
