@@ -295,9 +295,9 @@ public class MyUtil {
 				t = t.replaceAll("\\" + inviod[i], "");
 			t = t.replaceAll("-+", "-"); //替换掉重复的连接符
 			t = t.toLowerCase();
-			while( ! checkWord( t.charAt(0))  )
+			while(t.length() > 0 && ! checkWord( t.charAt(0))  )
 				t = t.substring(1);
-			while( ! checkWord( t.charAt( t.length()-1 ))  )
+			while(t.length() > 0 && ! checkWord( t.charAt( t.length()-1 ))  )
 				t = t.substring(0, t.length()-1);
 			//t.replaceAll("", replacement)
 		} catch (UnsupportedEncodingException e) {

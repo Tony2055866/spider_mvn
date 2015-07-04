@@ -10,6 +10,7 @@ import com.model.WpTermTaxonomy;
 import com.util.CodeUtil;
 import com.util.MyUtil;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.htmlparser.Node;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.nodes.TextNode;
@@ -18,11 +19,13 @@ import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.Span;
 import org.htmlparser.tags.TextareaTag;
 import org.htmlparser.util.NodeList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class Spider4Csdn extends Spider{
-	
+	static Logger logger = LoggerFactory.getLogger(Spider4Csdn.class);
 	public static boolean debug = false;
 	
 	public WpPosts parseArticleSUrl(PageData page,String[] searchKeys){
@@ -99,8 +102,7 @@ System.out.println("文章标题:" + title);
 				
 			}
 			
-			StringBuffer sb = new StringBuffer();
-			
+
 			
 			int codeCnt= replaceCodeTag(contentDiv.getChildrenHTML(), post, searchKeys);
 			boolean hasCode = codeCnt > 0;
@@ -212,11 +214,12 @@ System.out.println("文章标题:" + title);
 	
 	public static void main(String[] args) {
 		//Init.init();
-		
-		String url = "http://blog.csdn.net/huixisheng/article/details/5786209";
-		String searchKeys[] = new String[]{"hdu", "3492"};
+		//blog.csdn.net/hqu_fritz/article/details/39474493
+		String url = "http://blog.csdn.net/hqu_fritz/article/details/39474493";
+		String searchKeys[] = new String[]{"hdu", "3768"};
 		PageData pg = MyUtil.getPage(url, false);
 		WpPosts post = new Spider4Csdn().parseArticleSUrl(pg, null, false);
+		logger.info("start print article content!! ");
 		if(post != null){
 			for(Content con:post.listContent){
 				//System.out.println(con.text + "\n --------------------");
@@ -278,6 +281,22 @@ System.out.println("文章标题:" + title);
 					pre.removeAttribute("cols");
 					sb.append(pre.toTagHtml());
 				}
+			}else if(node instanceof Div && (node.toHtml().contains("code_snippet_id"))){
+				//logger.info("code_snippet_id div's html:" + node.toHtml());
+				List<PreTag> codes =MyUtil.parseTags(node.toHtml(), PreTag.class, "name", "code");
+				logger.info("codes.size : " + codes.size());
+				for(PreTag preCodeTag:codes){
+
+					if(StringUtils.isNotEmpty(preCodeTag.getAttribute("class")) && !preCodeTag.getAttribute("class").equals("null") ){
+						preCodeTag.removeAttribute("class");
+						preCodeTag.setAttribute("class", "'brush:" + preCodeTag.getAttribute("class")+"'");
+					}else{
+						preCodeTag.removeAttribute("class");
+						preCodeTag.setAttribute("class", "'brush:cpp'");
+					}
+					//sb.append(preCodeTag.toTagHtml());
+				}
+
 			}
 			else if(node instanceof TextNode){
 				sb.append(node.getText());

@@ -1,5 +1,6 @@
 package com.test;
 
+import com.sqider.PreTag;
 import com.util.MyUtil;
 import org.apache.commons.io.IOUtils;
 import org.htmlparser.Node;
@@ -23,6 +24,9 @@ public class Test {
 //		}
 //	}
 	public static void main(String[] args) throws Exception {
+		PreTag tag = new PreTag();
+		tag.setAttribute("class","'brush:cpp'");
+		System.out.println(tag.toTagHtml());
 		/*PageData pd =  MyUtil.getPage("http://www.java3z.com/cwbwebhome/article/article17/acm160.html", false,"gb2312");
 		System.out.println(pd.html);
 		IOUtils.write(pd.html, FileUtils.openOutputStream(new File(file)));
