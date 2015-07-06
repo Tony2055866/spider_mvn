@@ -370,7 +370,7 @@ public class MyUtil {
 		//System.out.println( clearChinese("123你'好“hello-") );
 		//System.out.println("---adf--".replaceAll("-+","-" ));
 		//System.out.println(URLEncoder.encode(s));
-		System.out.println(getCodeFromLocal("hdu", "3303"));
+		System.out.println(getCodeFromLocal("hdu", "3930"));
 	}
 	public static boolean rightTitle1(String title, String[] keys) {
 		title = title.toLowerCase();
@@ -395,7 +395,7 @@ public class MyUtil {
 		File file = new File(Init.ojsourcesDir + File.separatorChar + oj.toUpperCase() + File.separator + pro + ".cpp");
 		if(file.exists()){
 			try {
-				return IOUtils.toString(new FileInputStream(file));
+				return IOUtils.toString(new FileInputStream(file),"GBK");
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
