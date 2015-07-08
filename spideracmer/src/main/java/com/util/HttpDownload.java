@@ -61,8 +61,7 @@ public class HttpDownload {
            HttpResponse response = client.execute(httpget);
            int statcode =response.getStatusLine().getStatusCode();
            if(statcode != 200){
-               System.out.println("statcode == " +  statcode);
-               throw new Exception("bad  imgae url!");
+               System.out.println("statcode == " +  statcode + "  bad  imgae url!");
            }
            /*HashMap<String, String> headers = new HashMap<String, String>();
            headers.put("Referer", refer);
