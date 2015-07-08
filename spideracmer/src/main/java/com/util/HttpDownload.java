@@ -62,6 +62,7 @@ public class HttpDownload {
            int statcode =response.getStatusLine().getStatusCode();
            if(statcode != 200){
                System.out.println("statcode == " +  statcode + "  bad  imgae url!");
+               return null;
            }
            /*HashMap<String, String> headers = new HashMap<String, String>();
            headers.put("Referer", refer);
