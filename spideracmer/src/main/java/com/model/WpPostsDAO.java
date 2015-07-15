@@ -75,6 +75,23 @@ public class WpPostsDAO extends BaseHibernateDAO {
 		}
 	}
 
+
+	public void save2(WpPosts transientInstance) {
+		log.debug("saving WpPosts instance:" + openCurrentSession().hashCode());
+		try {
+
+			Transaction tran = HibernateSessionFactory.getSessionFactory().getCurrentSession().beginTransaction();
+			HibernateSessionFactory.getSessionFactory().getCurrentSession().saveOrUpdate( transientInstance );
+			//tran.commit();
+			//openCurrentSession().close();
+			log.debug("save successful");
+			tran.commit();
+		} catch (RuntimeException re) {
+			log.error("save failed", re);
+			throw re;
+		}
+	}
+
 	public void delete(WpPosts persistentInstance) {
 		log.debug("deleting WpPosts instance");
 		try {

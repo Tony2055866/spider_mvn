@@ -40,7 +40,7 @@ public class WpCommentsDAO extends BaseHibernateDAO {
 	public void save(WpComments transientInstance) {
 		log.debug("saving WpComments instance");
 		try {
-			getSession().save(transientInstance);
+			openCurrentSession().save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);

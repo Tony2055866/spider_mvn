@@ -2,6 +2,7 @@
 <%@page import="java.sql.Connection"%>
 <%@page import="com.util.JdbcUtil"%>
 <%@page import="java.sql.PreparedStatement"%>
+<%@ page import="com.duoshuo.AddCommentLocal" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -34,21 +35,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    
    <%
    String m = request.getParameter("m");
-   int mi = Integer.parseInt(m);
-   System.out.println(mi);
-   Connection conn = JdbcUtil.getConnection();
-   String sql[] = new String[]{
-   	"update wp_postmeta set meta_value= FLOOR( 20+RAND() *50) where meta_key='post_views_count' and meta_value < 50;",
-   	"update wp_postmeta set meta_value= FLOOR( 50+RAND() *100) where meta_key='post_views_count' and meta_value >= 50 and meta_value < 200;",
-   	"update wp_postmeta set meta_value= FLOOR( 200+RAND() *300) where meta_key='post_views_count' and meta_value >= 200 and meta_value < 600;"
-   };
-   if(mi >= 0 && mi <= 2){
-   		PreparedStatement ps = conn.prepareStatement(sql[mi]);
-   		int res = ps.executeUpdate();
-   		out.println("update <br>" + res + "  <br>lines");
-   		System.out.println(sql[mi]);
-   }
-   conn.close();
+       String comment = request.getParameter("comment");
+       if(m != null){
+           int mi = Integer.parseInt(m);
+           System.out.println(mi);
+           Connection conn = JdbcUtil.getConnection();
+           String sql[] = new String[]{
+                   "update wp_postmeta set meta_value= FLOOR( 20+RAND() *50) where meta_key='post_views_count' and meta_value < 50;",
+                   "update wp_postmeta set meta_value= FLOOR( 50+RAND() *100) where meta_key='post_views_count' and meta_value >= 50 and meta_value < 200;",
+                   "update wp_postmeta set meta_value= FLOOR( 200+RAND() *300) where meta_key='post_views_count' and meta_value >= 200 and meta_value < 600;"
+           };
+           if(mi >= 0 && mi <= 2){
+               PreparedStatement ps = conn.prepareStatement(sql[mi]);
+               int res = ps.executeUpdate();
+               out.println("update <br>" + res + "  <br>lines");
+               System.out.println(sql[mi]);
+           }
+           conn.close();
+       }else if(comment != null){
+           int com = Integer.parseInt(comment);
+           AddCommentLocal.commentLimit = com;
+           if(com == 0){
+               AddCommentLocal.running = false;
+           }
+           if(AddCommentLocal.running == false){
+               AddCommentLocal.main(null);
+           }else{
+               out.println("cnt:" + AddCommentLocal.cnt + "   all:" + AddCommentLocal.all);
+           }
+
+       }else{
+            out.println("nothing!");
+       }
+
     %>
   </body>
 </html>
