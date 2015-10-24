@@ -44,7 +44,7 @@ public class CodeUtil {
 		String cleanCode = "";
 		Scanner s = new Scanner(sb.toString());
 		String line;
-		if(s.hasNextInt()){
+		if(s.hasNextInt() && s.hasNextLine()){
 			int first = s.nextInt();
 			cleanCode = s.nextLine() + "\n";
 			if(first == 1){
