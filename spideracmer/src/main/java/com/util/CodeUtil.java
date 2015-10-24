@@ -46,7 +46,9 @@ public class CodeUtil {
 		String line;
 		if(s.hasNextInt() && s.hasNextLine()){
 			int first = s.nextInt();
-			cleanCode = s.nextLine() + "\n";
+			if(s.hasNextLine()){
+				cleanCode = s.nextLine() + "\n";
+			}
 			if(first == 1){
 				while(s.hasNextInt()&& s.hasNextLine()){
 					
