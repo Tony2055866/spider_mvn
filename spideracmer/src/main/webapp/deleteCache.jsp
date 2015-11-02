@@ -32,11 +32,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   if(url!=null && url.length() > 0){
   int i = url.indexOf("www");
   url = url.substring(i);
-  System.out.println(url);
+  logger.info(url);
   if(url.endsWith("com")) url += "/index.html";
   if(url.endsWith("/")) url += "index.html";
   	File file = new File("/server/acmerblog/wp-content/cache/supercache/" + url);
-  	System.out.println("/server/acmerblog/wp-content/cache/supercache/" + url);
+  	logger.info("/server/acmerblog/wp-content/cache/supercache/" + url);
   	if(file.exists()){
   		if(file.isDirectory())
   			out.println("isDirectory!!");

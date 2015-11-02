@@ -72,7 +72,7 @@ public class CodeUtil {
 		if(code.contains("#include")) return "cpp";
 		if(code.contains("import")) return "Java";
 		if(code.contains("public static void")) return "Java";
-		if(code.contains("System.out.println")) return "Java";
+		if(code.contains("logger.info")) return "Java";
 		if(code.contains("System.in")) return "Java";
 		if(code.contains("using namespace")) return "cpp";
 		if(code.contains("<?php")) return "php";
@@ -88,16 +88,19 @@ public class CodeUtil {
 //	public static boolean checkbrush(String lang){
 //		return allLang.contains(lang.toLowerCase());
 //	}
-	
+
+
+	static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(CodeUtil.class);
+
 	public static void main(String[] args) {
 		try {
 			String testHtml = IOUtils.toString(new FileInputStream("E:\\Workspaces\\ACMER\\spider-hib\\src\\test.txt"));
 			//测试获取代码
 			/*
-			System.out.println(testHtml);
-			System.out.println(getCode(testHtml));
+			logger.info(testHtml);
+			logger.info(getCode(testHtml));
 			
-			System.out.println(StringEscapeUtils.escapeHtml4(testHtml));*/
+			logger.info(StringEscapeUtils.escapeHtml4(testHtml));*/
 			Scanner s = new Scanner(testHtml);
 			String total = "";
 			String line;
@@ -117,7 +120,7 @@ public class CodeUtil {
 				
 				
 			}
-			System.out.println(total);
+			logger.info(total);
 		}  catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

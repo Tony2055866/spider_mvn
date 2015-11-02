@@ -18,6 +18,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,16 +26,17 @@ import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 public class ShaiDaiMa extends Spider{
-	
-	
-	
+
+	static Logger logger = Logger.getLogger(ShaiDaiMa.class);
+
+
 	static HttpContext context;
 	static HttpClient client;
 	
 	public static void main(String[] args) {
 		//login();
-		//System.out.println(context + " " + client);
-		//System.out.println ( getCode("http://shaidaima.com/source/view/4709") );
+		//logger.info(context + " " + client);
+		//logger.info ( getCode("http://shaidaima.com/source/view/4709") );
 		
 		ShaiDaiMa sdm = new ShaiDaiMa();
 		String url = "http://shaidaima.com/source/view/3014";
@@ -75,12 +77,12 @@ public class ShaiDaiMa extends Spider{
 				 //response = client.execute(get, context);
 				InputStream in =  response.getEntity().getContent();
 				String res = Util.convertStreamToString(in);
-				//System.out.println(res);
+				//logger.info(res);
 				 EntityUtils.consume(response.getEntity());
 				response = client.execute(get, context);
 				 in =  response.getEntity().getContent();
 				 res = Util.convertStreamToString(in);
-				//System.out.println(res);
+				//logger.info(res);
 				 EntityUtils.consume(response.getEntity());
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
@@ -104,7 +106,7 @@ public class ShaiDaiMa extends Spider{
 				e.printStackTrace();
 			}
 			
-			//System.out.println("晒代码 getCode 失败");
+			//logger.info("晒代码 getCode 失败");
 		}
 		 pd = MyUtil.getPage(url, client, context);
 		 if(pd.html.contains("请先登录晒代码才能看到这里的代码哦")){
@@ -128,7 +130,7 @@ public class ShaiDaiMa extends Spider{
 		 WpPosts post = new WpPosts();
 		 post.host = page.host;
 		try {
-			System.out.println("Spier4Shaidaima 开始解析:" + page.url);
+			logger.info("Spier4Shaidaima 开始解析:" + page.url);
 			Map<WpTermTaxonomy, Integer> keyCnt = new HashMap();
 	
 			post.power -= 100;
@@ -165,12 +167,12 @@ public class ShaiDaiMa extends Spider{
 			post.power += power;
 			post.hasCode = true;
 			post.url = page.url;
-			System.out.println("解析成功！！！！");
+			logger.info("解析成功！！！！");
 			return post;
 		} catch (Exception e) {
 		
 			e.printStackTrace();
-			//System.out.println("parse Html:-----------------\n" + page.html);
+			//logger.info("parse Html:-----------------\n" + page.html);
 			return null;
 		}
 	}

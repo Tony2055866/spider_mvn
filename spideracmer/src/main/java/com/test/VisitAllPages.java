@@ -12,7 +12,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class VisitAllPages {
-	
+
+
+	static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(VisitAllPages.class);
+
+
 	public static List<String> allurls;
 	static{
 		allurls = getAllPages();
@@ -30,18 +34,18 @@ public class VisitAllPages {
 		List posts = session.createQuery("select * from WpPosts post where post.postStatus='publish' and " +
 				"post.postType='post'").list();
 
-		System.out.println(posts.size());
+		logger.info(posts.size());
 		tran.commit();
 		return null;
 	}
 
 	private static void visitAll() {
 		int cnt = 0;
-		for(String url:allurls){
-			
+		for(String url : allurls) {
+
 			PageData pda = MyUtil.getPage(url);
 			if(pda!=null){
-				System.out.println(cnt + "  ok url! " + url);
+				logger.info(cnt + "  ok url! " + url);
 			}
 			cnt ++;
 			

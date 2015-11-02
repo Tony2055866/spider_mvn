@@ -29,7 +29,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <body>
   		<%
 		String ip = request.getRemoteHost();
-		//System.out.println(ip);
+		//logger.info(ip);
   if(session.getAttribute("login") == null && !ip.equals("127.0.0.1") && !ip.equals("202.108.77.42")){
   	response.sendRedirect("index.jsp");
   }

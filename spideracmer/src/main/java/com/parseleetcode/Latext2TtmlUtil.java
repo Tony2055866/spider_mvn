@@ -55,9 +55,7 @@ public class Latext2TtmlUtil {
 "\\item 若\\fn{A[m]>A[l]}，则区间\\fn{[l,m]}一定递增\n"+
 "\\item 若\\fn{A[m]==A[l]} 确定不了，那就\\fn{l++}，往下看一步即可。\n"+
 "\\myenddot\n";
-		System.out.println(input);
 		
-		System.out.println(tex2Html(input));
 	}
 	
 }

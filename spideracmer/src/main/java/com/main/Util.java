@@ -7,6 +7,8 @@ import com.sqider.Content;
 import com.sqider.PageData;
 import com.util.ImageUtil;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.sql.Timestamp;
@@ -16,6 +18,10 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Util {
+
+	private static Logger logger = LoggerFactory.getLogger(Util.class);
+
+
 	static int dayTime = 24 *60  * 60 * 1000;
 	static long hourTime = 60  * 60 * 1000;
 	public static String adStrings[] = {
@@ -77,7 +83,7 @@ public class Util {
 		String text = "";
 		for(int i=0; i<post.listContent.size(); i++){
 			Content content = post.listContent.get(i);
-			//System.out.println(content.text);
+			//logger.info(content.text);
 			if(content == null) continue;
 			if(!content.isCode ){
 				content.text = content.text.replaceAll("href=\"http://.+?\"", "");
@@ -119,16 +125,13 @@ public class Util {
 	
 	
 	public static void main(String[] args) {
-//		System.out.println(StringEscapeUtils.unescapeHtml4("&nbsp; &nbsp; &nbsp;").trim().replaceAll("[\\s\\u00A0]+$", ""));
-//		System.out.println(StringEscapeUtils.unescapeHtml4("&nbsp;").equals(" "));
-//		System.out.println((int)StringEscapeUtils.unescapeHtml4("&nbsp;").charAt(0));
-//		System.out.println((int)' ');
-//		System.out.println("&nbsp; &nbsp;".replaceAll("&nbsp;", "dd"));
-		System.out.println(600 * hourTime);
+//		logger.info(StringEscapeUtils.unescapeHtml4("&nbsp; &nbsp; &nbsp;").trim().replaceAll("[\\s\\u00A0]+$", ""));
+//		logger.info(StringEscapeUtils.unescapeHtml4("&nbsp;").equals(" "));
+//		logger.info((int)StringEscapeUtils.unescapeHtml4("&nbsp;").charAt(0));
+//		logger.info((int)' ');
+//		logger.info("&nbsp; &nbsp;".replaceAll("&nbsp;", "dd"));
 		long postTime = System.currentTimeMillis() - (long)(1000 * hourTime) ;
-		System.out.println(System.currentTimeMillis());
-		System.out.println(postTime);
-		System.out.println(new Date(postTime));
+	
 	}
 
 	

@@ -3,6 +3,8 @@ package com.duoshuo;
 import com.model.*;
 import com.util.HibernateSessionFactory;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.sql.Timestamp;
@@ -15,7 +17,9 @@ import java.util.*;
 public class AddCommentLocal {
     static Random r = new Random();
     static WpCommentsDAO commentsDAO = new WpCommentsDAO();
-
+    
+    private static Logger logger = LoggerFactory.getLogger(AddCommentLocal.class);
+    
     static List<String> names;
     public static boolean  running;
     public static int commentLimit = 10;
@@ -106,12 +110,12 @@ public class AddCommentLocal {
             if(line.trim().length() > 0)
                 comments.add(line.trim());
         }
-        System.out.println(comments.size());
+        logger.info(comments.size());
         List<WpComments> list = commentsDAO.findByCommentApproved("1");
         for(WpComments comm:list){
             comments.add(comm.getCommentContent());
         }
-        System.out.println(comments.size());
+        logger.info(comments.size());
         return comments;
     }
 

@@ -3,6 +3,7 @@ package com.sqider;
 import com.main.Main;
 import com.model.WpPosts;
 import com.util.MyUtil;
+import org.apache.log4j.Logger;
 import org.htmlparser.tags.LinkTag;
 
 import java.net.URLEncoder;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Sougou extends SearchEngine{
+	static Logger logger = Logger.getLogger(Sougou.class);
 
 	
 	/**
@@ -26,7 +28,7 @@ public class Sougou extends SearchEngine{
 	
 	public static void main(String[] args) {
 		List<String> url = new Sougou().search(new String[]{"hdu","2394"}, 0);
-		for(String str:url)System.out.println(str);
+		for(String str:url)logger.info(str);
 	}
 
 	@Override
@@ -43,13 +45,13 @@ public class Sougou extends SearchEngine{
 
 		url="http://www.sogou.com/web?ie=utf8&query="+ URLEncoder.encode(keys[0]);
 		for(int i=1; i<keys.length; i++) url += "+" + URLEncoder.encode(keys[i]);
-System.out.println(url);
+logger.info(url);
 		if(Main.out != null)
 			Main.out.println(url);		
 		
 		PageData pd = MyUtil.getPage(url ,false);
 		if(pd == null){
-			System.out.println(this.getClass()+":搜索失败!");
+			logger.info(this.getClass() + ":搜索失败!");
 			return urls;
 		}
 		List<LinkTag> links = MyUtil.parseTags(pd.html, LinkTag.class, "name", "dttl");

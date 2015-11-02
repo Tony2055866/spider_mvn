@@ -21,7 +21,7 @@ public class TermDao {
 		WpTermTaxonomyDAO wtdao = new WpTermTaxonomyDAO();
 		WpTermsDAO termDao = new WpTermsDAO();
 		List<WpTermTaxonomy> list1 = wtdao.findByTaxonomy("category");
-		//System.out.println(list.size());
+		//logger.info(list.size());
 		//List<WpTerms> cateTerms = new ArrayList<WpTerms>(list.size());
 		//for(int i=0; i<list.size(); i++){
 //			WpTermTaxonomy taxonomy = list.get(i);
@@ -35,7 +35,7 @@ public class TermDao {
 //			}
 //			cateTerms.add(term);
 			
-			//System.out.println(term.getName());
+			//logger.info(term.getName());
 		//}
 		
 		tran.commit();

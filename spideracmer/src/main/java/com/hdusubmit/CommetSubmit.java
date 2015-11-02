@@ -65,13 +65,13 @@ data = "http://api.duoshuo.com/users/import.json?" + URLEncoder.encode(data);
 			HttpResponse response = client.execute(post);
 			int stat = response.getStatusLine().getStatusCode();
 			String json = "", line = null;
-			//System.out.println(stat);
+			//logger.info(stat);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					response.getEntity().getContent()));
 			while ((line = reader.readLine()) != null)
 				json += line + "\n";
 
-			//System.out.println(json);
+			//logger.info(json);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 

@@ -27,7 +27,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <body>
   		<%
 		String ip = request.getRemoteHost();
-		//System.out.println(ip);
+		//logger.info(ip);
   if(session.getAttribute("login") == null && !ip.equals("127.0.0.1") && !ip.equals("202.108.77.25")){
   	response.sendRedirect("index.jsp");
   }
@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        String comment = request.getParameter("comment");
        if(m != null){
            int mi = Integer.parseInt(m);
-           System.out.println(mi);
+           logger.info(mi);
            Connection conn = JdbcUtil.getConnection();
            String sql[] = new String[]{
                    "update wp_postmeta set meta_value= FLOOR( 20+RAND() *50) where meta_key='post_views_count' and meta_value < 50;",
@@ -49,7 +49,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                PreparedStatement ps = conn.prepareStatement(sql[mi]);
                int res = ps.executeUpdate();
                out.println("update <br>" + res + "  <br>lines");
-               System.out.println(sql[mi]);
+               logger.info(sql[mi]);
            }
            conn.close();
        }else if(comment != null){

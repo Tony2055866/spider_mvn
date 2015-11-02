@@ -11,6 +11,10 @@ import java.util.Random;
 import java.util.Set;
 
 public class DaoTest extends TestCase{
+
+	static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(DaoTest.class);
+
+
 	WpPostsDAO pdao = new WpPostsDAO();
 	
 	public void testAddarticle(){
@@ -24,20 +28,20 @@ public class DaoTest extends TestCase{
 		WpTermsDAO termDao = new WpTermsDAO();
 		
 		List<WpTermTaxonomy> list = wtdao.findByTaxonomy("category");
-		System.out.println(list.size());
+		logger.info(list.size());
 	
 		List<WpTerms> cateTerms = new ArrayList<WpTerms>(list.size());
 		for(int i=0; i<list.size(); i++){
 			WpTermTaxonomy taxonomy = list.get(i);
 			WpTerms term = termDao.findById(taxonomy.getTermId());
 			cateTerms.add(term);
-			System.out.println(term.getName() + "  " + term.getSlug());
+			logger.info(term.getName() + "  " + term.getSlug());
 		}*/
 	}
 	
 	public void testTest(){
 		/*try {
-			System.out.println(URLDecoder.decode("bfs-%e5%ae%bd%e5%ba%a6%e4%bc%98%e5%85%88-%e5%b9%bf%e5%ba%a6%e4%bc%98%e5%85%88","utf-8"));
+			logger.info(URLDecoder.decode("bfs-%e5%ae%bd%e5%ba%a6%e4%bc%98%e5%85%88-%e5%b9%bf%e5%ba%a6%e4%bc%98%e5%85%88","utf-8"));
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -85,7 +89,7 @@ public class DaoTest extends TestCase{
 		
 		WpTermTaxonomy termtax01 =wtdao.findById(21L);
 		
-		//System.out.println(termtax01.getTerm().getName());
+		//logger.info(termtax01.getTerm().getName());
 		
 		WpTermTaxonomy termtax02 =wtdao.findById(62L);
 		
@@ -93,7 +97,7 @@ public class DaoTest extends TestCase{
 		Set<WpComments> comments = getCommets(post);
 		post.setWpCommentses(comments);
 		pdao.save(post);
-		System.out.println(post.getId());
+		logger.info(post.getId());
 		
 		post.setGuid(Init.host + "?p=" + post.getId());
 		post.getTerms().add(termtax01);
@@ -107,7 +111,7 @@ public class DaoTest extends TestCase{
 //		WpCommentsDAO comDao = new WpCommentsDAO();
 //		for(WpComments com:comments){
 //			comDao.save(com);
-//			System.out.println(com.getCommentContent());
+//			logger.info(com.getCommentContent());
 //		}
 		
 	}

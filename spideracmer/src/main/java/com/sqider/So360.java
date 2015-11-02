@@ -1,6 +1,7 @@
 package com.sqider;
 
 import com.util.MyUtil;
+import org.apache.log4j.Logger;
 import org.htmlparser.tags.LinkTag;
 
 import java.net.URLEncoder;
@@ -8,9 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class So360 extends SearchEngine {
+
+	static Logger logger = Logger.getLogger(So360.class);
+
 	public static void main(String[] args) {
 		List<String> url = new So360().search(new String[]{"hdu","2394"}, 0);
-		for(String str:url)System.out.println(str);
+		for(String str:url)logger.info(str);
 	}
 
 	@Override
@@ -24,7 +28,7 @@ public class So360 extends SearchEngine {
 		for(int i=1; i<keys.length; i++)
 			url += "+" + URLEncoder.encode(keys[i]);
 		List<String> urls = new ArrayList<String>();
-		System.out.println("360搜索:" + url);
+		logger.info("360搜索:" + url);
 		PageData pd = MyUtil.getPage(url);
 		if(pd != null){
 			List<LinkTag> links = MyUtil.parseTags(pd.html, LinkTag.class, "data-tp", null);

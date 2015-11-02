@@ -2,6 +2,7 @@ package com.sqider;
 
 import com.main.Main;
 import com.util.MyUtil;
+import org.apache.log4j.Logger;
 import org.htmlparser.tags.HeadingTag;
 import org.htmlparser.tags.LinkTag;
 
@@ -10,8 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Google extends SearchEngine {
-	
-		public List<String> search(String keys[],int page, int flag){
+	static Logger logger = Logger.getLogger(Google.class);
+
+	public List<String> search(String keys[],int page, int flag){
 		String url="";
 		List<String> urls = new ArrayList<String>();
 
@@ -28,22 +30,22 @@ public class Google extends SearchEngine {
 		url += "&oq=" + URLEncoder.encode(keys[0]);
 		for(int i=1; i<keys.length; i++) url += "+" + URLEncoder.encode(keys[i]);
 
-		System.out.println(url);
+		logger.info(url);
 if(Main.out != null)
 Main.out.println(url);	
 		PageData pd = MyUtil.getPage(url, false);
-		//System.out.println(pd.html);
+		//logger.info(pd.html);
 		if(pd == null){
-			System.out.println("搜索失败!");
+			logger.info("搜索失败!");
 			return null;
 		}
 		/*List<LinkTag> list = MyUtil.parseTags(pd.html, LinkTag.class, "data-click", null);
 		for(LinkTag link:list){
-			//System.out.println(link.getAttribute("href"));
-			//System.out.println(link.getLinkText().toLowerCase());
+			//logger.info(link.getAttribute("href"));
+			//logger.info(link.getLinkText().toLowerCase());
 			urls.add(link.getAttribute("href"));
 		}*/
-		//System.out.println(pd.html);
+		//logger.info(pd.html);
 		List<HeadingTag> divs = MyUtil.parseTags(pd.html, HeadingTag.class, "class", "r");
 		for(HeadingTag div:divs){
 			List<LinkTag> links = MyUtil.parseTags(div.toHtml(), LinkTag.class, "target", "_blank");
@@ -61,7 +63,7 @@ Main.out.println(url);
 				}
 			}
 			
-			//System.out.println(link.getLink());
+			//logger.info(link.getLink());
 		}
 		return urls;
 	}
@@ -93,7 +95,7 @@ Main.out.println(url);
 		public static void main(String[] args) {
 			String keys[] = new String[]{"hdu","3152"};
 			List<String> urls = new Google().search(keys,30);
-			for(String str:urls) System.out.println(str);
+			for(String str:urls) logger.info(str);
 		}
 
 		@Override

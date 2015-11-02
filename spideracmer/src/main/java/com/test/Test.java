@@ -13,7 +13,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Test {
-//	static String file = "D://test.txt";
+
+	static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(Test.class);
+
+	
+	//	static String file = "D://test.txt";
 //	static String file2 = "D://test2.txt";
 //	static{
 //		if (System.getProperty("os.name") != null && System.getProperty("os.name").toLowerCase().contains("windows")) {
@@ -26,35 +30,35 @@ public class Test {
 	public static void main(String[] args) throws Exception {
 		PreTag tag = new PreTag();
 		tag.setAttribute("class","'brush:cpp'");
-		System.out.println(tag.toTagHtml());
+		logger.info(tag.toTagHtml());
 		/*PageData pd =  MyUtil.getPage("http://www.java3z.com/cwbwebhome/article/article17/acm160.html", false,"gb2312");
-		System.out.println(pd.html);
+		logger.info(pd.html);
 		IOUtils.write(pd.html, FileUtils.openOutputStream(new File(file)));
 		pd =  MyUtil.getPage("http://poj.org/problem?id=1061", false);
 		IOUtils.write(pd.html, FileUtils.openOutputStream(new File(file2)));
-		System.out.println(pd.html);*/
+		logger.info(pd.html);*/
 
 		
 		//List<PreTag> codes = MyUtil.parseTags(testHtml, PreTag.class, "class", null, true);
-		//System.out.println(codes.get(0).getStringText());
+		//logger.info(codes.get(0).getStringText());
 		
 		
-		//System.out.println(codes.size());
+		//logger.info(codes.size());
 		/*for(int i=0; i<codes.size(); i++){
 			Node n = list.elementAt(i);
-			System.out.println(n);
+			logger.info(n);
 		}*/
       
-		//System.out.println(org.replaceAll("href=\"http://s3\\.51cto\\.com.+\">", ">"));
+		//logger.info(org.replaceAll("href=\"http://s3\\.51cto\\.com.+\">", ">"));
 				//replaceAll("href=\"http://s3\\.51cto\\.com.+\">", ">"));
 		
 		//测试下载图片
 		/*String result = ImageUtil.modifyImgHtml(testHtml,
 				"" , null,  "",  Init.baseDownLoad + 1223 + "-", "http://blog.csdn.net/" );
-		System.out.println(result);*/
+		logger.info(result);*/
 		//测试H1标签
 		/*List<HeadingTag> codes = MyUtil.parseTags(testHtml, HeadingTag.class, "style", null, true);
-		System.out.println(codes.size());*/
+		logger.info(codes.size());*/
 		
 		//测试标题
 	/*	List<Span> spans = MyUtil.parseTags(testHtml, Span.class, "class", "link_title");
@@ -64,7 +68,7 @@ public class Test {
 //		testRegx();
 		String utf8str = "class Solution:\\u000D\\u000A    # @return an integer\\u000D\\u000A";
 		byte[] utf8 = utf8str.getBytes("UTF-8");
-		System.out.println(unescape(utf8str));
+		logger.info(unescape(utf8str));
 		
 	}
 	static String unescape(String s) {
@@ -116,14 +120,14 @@ public class Test {
 
 		//测试代码
 		//String testHtml = IOUtils.toString(new FileInputStream("E:\\Workspaces\\ACMER\\spider-hib\\src\\test.txt"));
-		//System.out.println(testHtml);
+		//logger.info(testHtml);
 		NodeList list = MyUtil.parseAllTags(testHtml);
 		for(int i=0; i<list.size(); i++){
 			Node n = list.elementAt(i);
-			if(n instanceof ImageTag){
+			if(n instanceof ImageTag) {
 				ImageTag img = (ImageTag)n;
 				img.setAttribute("src","nihao");
-				System.out.println(img.toHtml());
+				logger.info(img.toHtml());
 			}
 			
 		}
@@ -133,17 +137,17 @@ public class Test {
 		String allString = "<a href=\"http://baike.baidu.com/view/461750.htm\" class=\"nhao\" fdsf>";
 		allString = allString.replaceAll("href=\"http://.+?\"", "");
 		allString = allString.replaceAll("class=\".+?\"", "");
-		System.out.println(allString);
+		logger.info(allString);
 		String org = "<a href=\"http://s3.51cto.com/wyfs02/M02/1D/3D/wKioL1MYKSXhpQ2gAAEpRR0S2BI482.jpg\">fdsf </a> fdsf" +
-		"<a href=\"http://s3.51cto.com/wyfs02/M02/1D/3D/aadfessss.jpg\">fsdf </a>";
-		System.out.println(org.replaceAll("href=\"http://s3\\.51cto\\.com.+?\"", ""));
+				"<a href=\"http://s3.51cto.com/wyfs02/M02/1D/3D/aadfessss.jpg\">fsdf </a>";
+		logger.info(org.replaceAll("href=\"http://s3\\.51cto\\.com.+?\"", ""));
 		  Pattern pattern=Pattern.compile("href=\"http://s3\\.51cto\\.com.+?\""); 
-		    Matcher m=pattern.matcher(org); //除中文不用外，其他的都要 
-		       if(m.matches() ){ 
-		    	   System.out.println(m.find()); 
-		    	   System.out.println(m.start()); 
-		         System.out.println(m.end()); 
-		         System.out.println(m.group()); 
+		    Matcher m = pattern.matcher(org); //除中文不用外，其他的都要 
+		       if(m.matches()) {
+				   logger.info(m.find());
+				   logger.info(m.start()); 
+		         logger.info(m.end()); 
+		         logger.info(m.group()); 
 
 		       } 
 	}

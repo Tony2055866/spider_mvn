@@ -14,13 +14,13 @@
   14:     static void print(int[] arr,int k,int d)
   15:     {
   16:         if(k==d)
-  17:             System.out.println("最终排序结果为：");
+  17:             logger.info("最终排序结果为：");
   18:         else
-  19:             System.out.println("按第"+k+"位排序后，结果为：");
+  19:             logger.info("按第"+k+"位排序后，结果为：");
   20:         for (int t : arr) {
   21:             System.out.print(t + " ");
   22:         }
-  23:         System.out.println();
+  23:         logger.info();
   24:     }
   25:     
   26:     // 利用计数排序对元素的每一位进行排序
@@ -59,11 +59,11 @@
   59:     public static void main(String[] args) {
   60:         // TODO Auto-generated method stub
   61:         int[] arr = new int[] {326,453,608,835,751,435,704,690,88,79,79};//{ 333, 956, 175, 345, 212, 542, 99, 87 };
-  62:         System.out.println("基数排序前为：");
+  62:         logger.info("基数排序前为：");
   63:         for (int t : arr) {
   64:             System.out.print(t + " ");
   65:         }
-  66:         System.out.println();
+  66:         logger.info();
   67:         radixSorting(arr, 4);        
   68:     }
   69:  

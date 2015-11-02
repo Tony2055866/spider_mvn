@@ -4,7 +4,10 @@ import java.sql.*;
 
 
 public class getPojBlogs {
-	
+
+	static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(getPojBlogs.class);
+
+
 	private static String dbUrl = "jdbc:mysql://127.0.0.1/wordpress";
     public static String port;
     public static String host;
@@ -37,8 +40,8 @@ public class getPojBlogs {
 				String title = set.getString(1);
 				String name = set.getString(2);
 				Long id = set.getLong(3);
-				if(cnt >= 500 && title.toUpperCase().startsWith("POJ")){
-					System.out.println("<a href=\"http://www.acmerblog.com/" + name + "-" + id  + "\">" + title + "</a><br>");
+				if (cnt >= 500 && title.toUpperCase().startsWith("POJ")) {
+					logger.info("<a href=\"http://www.acmerblog.com/" + name + "-" + id  + "\">" + title + "</a><br>");
 				}
 				cnt++;
 				//if(cnt >= 500) break;

@@ -10,7 +10,10 @@ import org.htmlparser.tags.ImageTag;
 import org.htmlparser.util.NodeList;
 
 public class ImageUtil {
-	
+
+	static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ImageUtil.class);
+
+
 	//static String downLoadPaht ="D:\\PHP\\wordpress-3.7-zh_CN\\wordpress\\imgs\\poj\\";
 	/**
 	 * html:html
@@ -56,9 +59,9 @@ public class ImageUtil {
 						realUrl = originUrl;
 					
 					String downLoadName = HttpDownload.download(realUrl , downLoadPath, refer);
-					//System.out.println("保存图片:" + downLoadPath + i);
+					//logger.info("保存图片:" + downLoadPath + i);
 					//src="http://s3.51cto.com/wyfs02/M01/22/4C/wKioL1MaD4byGkhoAAI2j9TUy2E154.jpg" title="2222.jpg"
-//System.out.println("img.setAttribute:" + myhostImgBaseUrl  +downLoadName);
+//logger.info("img.setAttribute:" + myhostImgBaseUrl  +downLoadName);
 					img.removeAttribute("onload");
 					img.setAttribute("src", myhostImgBaseUrl  +downLoadName);
 					if(Main.proData != null)
@@ -137,7 +140,7 @@ public class ImageUtil {
 	}
 	public static void main(String[] args) {
 		
-//		System.out.println("aa\\img".replaceAll("\\\\", "/"));
-		//System.out.println("../../../data/images/con208-1004-2.JPG".replaceAll("\\.\\./", "/").replaceAll("", replacement));
+//		logger.info("aa\\img".replaceAll("\\\\", "/"));
+		//logger.info("../../../data/images/con208-1004-2.JPG".replaceAll("\\.\\./", "/").replaceAll("", replacement));
 	}
 }

@@ -12,6 +12,10 @@ import org.htmlparser.tags.LinkTag;
 import java.util.*;
 
 public class Spider4Sina extends Spider{
+
+	static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(Spider4Sina.class);
+
+	
 	static boolean test = false;
 	@Override
 	public WpPosts getArticleSUrl(PageData page) {
@@ -19,15 +23,15 @@ public class Spider4Sina extends Spider{
 		return null;
 	}
 	
-	public WpPosts parseArticleSUrl(PageData page,String[] searchKeys){
+	public WpPosts parseArticleSUrl(PageData page, String[] searchKeys){
 		WpPosts post = new WpPosts();
-		System.out.println("Spider4Cnblog 开始解析:" + page.url);
+		logger.info("Spider4Cnblog 开始解析:" + page.url);
 		Map<WpTermTaxonomy, Integer> keyCnt = new HashMap();
 		post.host = page.host;
 		try {
 			String title = getTitle(page);
 if(test)
-	System.out.println("文章标题:" + title);
+	logger.info("文章标题:" + title);
 			if(title == null) return null;
 			
 			//if( !rightTitle(title,searchKeys)) return null;
@@ -39,14 +43,14 @@ if(test)
 			String divString = contentDiv.toPlainTextString();
 			
 			if(test){
-				System.out.println("orgin:" + divString) ;
+				logger.info("orgin:" + divString) ;
 			}
 			
 			String allString = Util.getPlainHtml(divString);
 			
 			post.pageData = page;
 			//allString = ImageUtil.modifyImgHtml(allString, page);
-			//System.out.println("allString: " + allString);
+			//logger.info("allString: " + allString);
 			//不爬 已经有HDU内容的
 			if(allString.contains("Problem Description") || allString.contains("Sample Input")
 					|| allString.contains("问题描述")){
@@ -60,7 +64,7 @@ if(test)
 			List<Map.Entry<WpTermTaxonomy,Integer>> sort=new ArrayList();  //存储所有的key 出现的次数
 			if(true){
 				Set<WpTermTaxonomy> set = getMatchKeys(keys, title, allString, keyCnt);
-				//System.out.println("keyCnt.size():" + keyCnt.size());
+				//logger.info("keyCnt.size():" + keyCnt.size());
 				//if( keyCnt.size() == 0 ) return null;
 				if(keyCnt.size() > 1){
 					ValueComparator vc = new ValueComparator();
@@ -73,7 +77,7 @@ if(test)
 			}
 
 			List<Content> listCon = new ArrayList<Content>();
-if(test) System.out.println(test);
+if(test) logger.info(test);
 			listCon.add(new Content(allString, false, null));
 			boolean hasCode = false;
 			int codeCnt =0;
@@ -97,7 +101,7 @@ if(test) System.out.println(test);
 		List<LinkTag> links = MyUtil.parseTags(tagDiv.toHtml(), LinkTag.class, null, null);
 		for(LinkTag link:links){
 			keys.add(link.getLinkText());
-			if(test) System.out.println(link.getLinkText());
+			if(test) logger.info(link.getLinkText());
 		}
 		return keys;
 	}
@@ -128,7 +132,7 @@ if(test) System.out.println(test);
 		String searchKeys[] = new String[]{"hdu", "2400"};
 		PageData pg = MyUtil.getPage(url, false);
 		WpPosts post = new Spider4Sina().parseArticleSUrl(pg, searchKeys);
-		System.out.println(post.listContent.get(0).text);
+		logger.info(post.listContent.get(0).text);
 		
 	}
 

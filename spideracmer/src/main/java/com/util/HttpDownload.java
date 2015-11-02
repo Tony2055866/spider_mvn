@@ -15,7 +15,10 @@ import java.net.URL;
 
 public class HttpDownload {
 
-   public static final int cache = 10 * 1024;
+    static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(GBK2UTF.class);
+
+    
+    public static final int cache = 10 * 1024;
    public static final boolean isWindows;
    public static final String splash;
    //public static final String root;
@@ -45,12 +48,12 @@ public class HttpDownload {
            HttpRequestBase httpget;
            try {
                client = new DefaultHttpClient();
-               //System.out.println("url:" + url);
+               //logger.info("url:" + url);
                 //url = URLEncoder.encode(url);
                URL url = new URL(urlstr);
                URI uri = new URI(url.getProtocol(), url.getHost(), url.getPath(), url.getQuery(), null);
                httpget = new HttpGet(uri);
-                System.out.println("下载:" + uri.getPath());
+                logger.info("下载:" + uri.getPath());
 
            } catch (Exception e) {
                e.printStackTrace();
@@ -60,8 +63,8 @@ public class HttpDownload {
 
            HttpResponse response = client.execute(httpget);
            int statcode =response.getStatusLine().getStatusCode();
-           if(statcode != 200){
-               System.out.println("statcode == " +  statcode + "  bad  imgae url!");
+       if (statcode != 200){
+               logger.info("statcode == " +  statcode + "  bad  imgae url!");
                return null;
            }
            /*HashMap<String, String> headers = new HashMap<String, String>();
@@ -74,7 +77,7 @@ public class HttpDownload {
 
 
            InputStream is = entity.getContent();
-           //System.out.println("path1 : " + filepath);
+           //logger.info("path1 : " + filepath);
            //if (filepath == null)
            if(filepath.endsWith("\\") ||filepath.endsWith("/"))
                filepath += getFileName(response, urlstr);
@@ -93,7 +96,7 @@ public class HttpDownload {
                }*/
 
            //}
-           System.out.println("下载至：" + filepath);
+           logger.info("下载至：" + filepath);
            File file = new File(filepath);
            if(file.exists()){
                return new File(filepath).getName();
@@ -149,8 +152,8 @@ public class HttpDownload {
        String type = "jpeg";
        if(headers != null && headers.length > 0)
             type = headers[0].getValue().toLowerCase();
-       //System.out.println(headers[0].getValue());
-       //System.out.println("test file and type: " + filename + " " +  type + "  " + endString);
+       //logger.info(headers[0].getValue());
+       //logger.info("test file and type: " + filename + " " +  type + "  " + endString);
 
 //		if (filename != null) {
 //			//filepath += filename;
@@ -183,13 +186,13 @@ public class HttpDownload {
    public static void outHeaders(HttpResponse response) {
        Header[] headers = response.getAllHeaders();
        for (int i = 0; i < headers.length; i++) {
-           System.out.println(headers[i]);
+           logger.info(headers[i]);
        }
    }
    public static void main(String[] args) {
 //		String url = "http://bbs.btwuji.com/job.php?action=download&pid=tpc&tid=320678&aid=216617";
-       String url="http://acm.hdu.edu.cn/../../data//images/1052-1.gif";
-       System.out.println(url.replaceAll("\\.\\./", "").replaceAll("//", "/"));
+       String url = "http://acm.hdu.edu.cn/../../data//images/1052-1.gif";
+       logger.info(url.replaceAll("\\.\\./", "").replaceAll("//", "/"));
 
 //		String filepath = "D:\\test\\a.torrent";
        //String filepath = "D:\\test\\a.jpg";

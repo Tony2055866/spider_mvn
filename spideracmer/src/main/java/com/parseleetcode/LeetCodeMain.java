@@ -58,7 +58,7 @@ public class LeetCodeMain {
 		//work();
 		//workNew();
 		//getAll();
-		//System.out.println(getMatchKey("暴力枚举"));
+		//logger.info(getMatchKey("暴力枚举"));
 	
 		UpdateAll();
 	}
@@ -83,7 +83,7 @@ public class LeetCodeMain {
 				i++;
 				codeScanner = new Scanner(new File(Init.ojsourcesDir + File.separator +
 						"leetcpptext" + File.separator + chaps[i] + ".tex"));
-				System.out.println("------------------------------------" + chaps[i]);
+				logger.info("------------------------------------" + chaps[i]);
 //				while(codeScanner.hasNext()){
 //					if(codeScanner.nextLine().contains("\\label{sec")) break;
 //				}
@@ -105,17 +105,17 @@ public class LeetCodeMain {
 			
 			while(codeScanner.hasNext()){
 				String line = codeScanner.nextLine();
-				System.out.println(line);
+				logger.info(line);
 				if(line.contains("section") && line.contains(title)) break;
 			}
 			
 			
-			System.out.println("---------------------");
-			System.out.println(title);
+			logger.info("---------------------");
+			logger.info(title);
 			if(!codeScanner.hasNextLine()) continue;
-			System.out.println(codeScanner.nextLine());
+			logger.info(codeScanner.nextLine());
 
-				//System.out.println("line:" + line);
+				//logger.info("line:" + line);
 					while(codeScanner.hasNext()){
 						String line = codeScanner.nextLine();
 						
@@ -148,7 +148,7 @@ public class LeetCodeMain {
 							break;
 						}
 					}
-			//System.out.println("txt :" + txt);
+			//logger.info("txt :" + txt);
 			
 			String codes[] = StringUtils.substringsBetween(allCodes, "begin{Code}", "\\end{Code}");
 			String items[] = StringUtils.substringsBetween(allitems, "item", "，");
@@ -173,22 +173,22 @@ public class LeetCodeMain {
 					text += "<a href='/" + url + ".html'>" + items[k].trim() + "</a>\n";
 				}
 			}
-			//System.out.println("update ------------------------------------");
-			//System.out.println(text);
+			//logger.info("update ------------------------------------");
+			//logger.info(text);
 			
 			post.setPostContent(text);
 			dao.save(post);
 			
 			
 			try {
-				//System.out.println(codes[0]);
+				//logger.info(codes[0]);
 				/*if(items != null && items.length > 0)
-					System.out.println("相关：" + items[0]);
+					logger.info("相关：" + items[0]);
 				else
-					System.out.println(allitems);*/
+					logger.info(allitems);*/
 			} catch (Exception e) {
-				System.out.println("-----------");
-				System.out.println(allCodes);
+				logger.info("-----------");
+				logger.info(allCodes);
 				
 				e.printStackTrace();
 				return;
@@ -266,7 +266,7 @@ public class LeetCodeMain {
 	//生成目录用
 	public static void workNew(){
 		
-		//System.out.println(LeetCode.map.keySet());
+		//logger.info(LeetCode.map.keySet());
 		try {
 			Scanner s = new Scanner(MyUtil.getPage("http://www.acmerblog.com/leetcode_problems.txt").html);
 			String artile = "";
@@ -277,21 +277,21 @@ public class LeetCodeMain {
 				if(line.indexOf('.') != -1)
 					line = line.substring(0,line.indexOf('.')).trim();
 				String url = MyUtil.clearTitleToUrl(line);
-				//System.out.println(url);
+				//logger.info(url);
 				
 				if(line.startsWith("title")){
 					artile += "<h2><strong>" + line.substring(5)+ "</strong></h2>\n";
 					 lastTitle = line.substring(5);
 				}else{
 					if(LeetCode.map.get(line) == null){
-						System.out.println(line);
+						logger.info(line);
 						throw new Exception("woqu a ");
 					}
 					catMap.put(line, lastTitle);
 					artile += "<a href='/"+ finSetMap.get(line) +".html'>"  + line+ "</a> &nbsp;";
 				}
 			}
-			System.out.println(artile);
+			logger.info(artile);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -332,7 +332,7 @@ public class LeetCodeMain {
 				
 				while(s.hasNextLine()){
 					String line = s.nextLine();
-					//System.out.println(line);
+					//logger.info(line);
 					if(line.contains("label") && line.contains("sec:")){
 						title = StringUtils.substringBetween(preLine, "section{", "}");
 						url = "leetcode-" + StringUtils.substringBetween(line, "section{", "}");
@@ -350,16 +350,16 @@ public class LeetCodeMain {
 				//contents = new ArrayList<String>();
 				while(textScanner.hasNextLine()){
 					String tline = textScanner.nextLine();
-//					System.out.println("-------------------");
-//					System.out.println(tline);
+//					logger.info("-------------------");
+//					logger.info(tline);
 					if(tline.trim().equals("分析")){
 						txt = "";
 						while(true){
 							tline = textScanner.nextLine();
 							if(tline.trim().startsWith("//LeetCode")){
 								//contents.add(txt);
-								System.out.println("----------txt----------");
-								System.out.println(txt.substring(0, (txt.indexOf("代码")+txt.length())%txt.length()));
+								logger.info("----------txt----------");
+								logger.info(txt.substring(0, (txt.indexOf("代码")+txt.length())%txt.length()));
 								break;
 							}
 							txt += tline + "\n";
@@ -394,7 +394,7 @@ public class LeetCodeMain {
 					if(tline.trim().contains("相关题目")) break;
 				}
 				
-				System.out.println("codes.size() : " + codes.size());
+				logger.info("codes.size() : " + codes.size());
 				
 				//找相关题目
 				relates = new ArrayList<String>();
@@ -473,7 +473,7 @@ public class LeetCodeMain {
 		
 		Set<WpTermTaxonomy> set = new HashSet<WpTermTaxonomy>();
 		if(cat == null) return set;
-		System.out.println("getMatchKey : " + cat);
+		logger.info("getMatchKey : " + cat);
 		for(String key: Init.catKeySet){
 			WpTermTaxonomy tax = Init.catTermTaxMap.get(key);
 			//for(String contentKey:keys){

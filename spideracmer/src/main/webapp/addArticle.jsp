@@ -34,7 +34,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      if(submit.equals("true") ){
      
      	String url = request.getParameter("url");
-     	//System.out.println(urls);
+     	//logger.info(urls);
      	String urls[] = url.split(";");
      	String cats[] = request.getParameterValues("cat[]");
      	String tags[] = request.getParameterValues("tag[]");
@@ -47,14 +47,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      	}
      	if(tags != null){
      		for(int i=0; i<tags.length; i++){
- //System.out.println( "TermDao.getTagTerms()" + TermDao.getTagTerms().size() + " tags[i]  " + tags[i] );
+ //logger.info( "TermDao.getTagTerms()" + TermDao.getTagTerms().size() + " tags[i]  " + tags[i] );
      			int index = Integer.parseInt(tags[i]);
      			set.add( TermDao.getTagTerms().get(index) );
      		}
      	}
      	int hours = Integer.parseInt( request.getParameter("hour") );
      	String isAddTag = request.getParameter("isAddTag");
- System.out.println("isAddTag: " + isAddTag);
+ logger.info("isAddTag: " + isAddTag);
      	String wpurl =  request.getParameter("wpurl"); //文章的固定链接
      	String isZhuan = request.getParameter("isZhuan");
      	AddByArticleUrl.isZhuan = isZhuan.equals("yes");

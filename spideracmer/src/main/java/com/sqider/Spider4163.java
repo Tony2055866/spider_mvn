@@ -10,6 +10,10 @@ import org.htmlparser.tags.Span;
 import java.util.*;
 
 public class Spider4163 extends Spider{
+
+	static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(Spider4163.class);
+
+
 	static boolean test = true;
 	@Override
 	public WpPosts getArticleSUrl(PageData page) {
@@ -17,31 +21,31 @@ public class Spider4163 extends Spider{
 		return null;
 	}
 	
-	public WpPosts parseArticleSUrl(PageData page,String[] searchKeys){
+	public WpPosts parseArticleSUrl(PageData page, String[] searchKeys){
 		WpPosts post = new WpPosts();
-		System.out.println("Spider4Cnblog 开始解析:" + page.url);
+		logger.info("Spider4Cnblog 开始解析:" + page.url);
 		Map<WpTermTaxonomy, Integer> keyCnt = new HashMap();
 		post.host = page.host;
 		try {
 			String title = getTitle(page);
 if(test)
-	System.out.println("文章标题:" + title);
+	logger.info("文章标题:" + title);
 			if(title == null) return null;
 			if(searchKeys != null){
 				if( !rightTitle(title,searchKeys)){
-					System.out.println("文章不符合");
+					logger.info("文章不符合");
 					return null;
 				}
 			}
 				post.setPostTitle(title);
 			List<String> keys = getKeys(page);
-//System.out.println(page.html);
+//logger.info(page.html);
 			Div contentDiv = MyUtil.parseTags(page.html, Div.class, "class", "bct fc05 fc11 nbw-blog ztag").get(0);
 //			contentDiv
 			String allString = contentDiv.getStringText();
 			//String allString = Util.getPlainHtml(contentDiv.toPlainTextString());
 		//	allString = ImageUtil.modifyImgHtml(allString, page);
-			//System.out.println("allString: " + allString);
+			//logger.info("allString: " + allString);
 			//不爬 已经有HDU内容的
 			if(allString.contains("Problem Description") || allString.contains("Sample Input")
 					|| allString.contains("问题描述")){
@@ -55,7 +59,7 @@ if(test)
 			List<Map.Entry<WpTermTaxonomy,Integer>> sort=new ArrayList();  //存储所有的key 出现的次数
 			if(true){
 				Set<WpTermTaxonomy> set = getMatchKeys(keys, title, allString, keyCnt);
-				//System.out.println("keyCnt.size():" + keyCnt.size());
+				//logger.info("keyCnt.size():" + keyCnt.size());
 				//if( keyCnt.size() == 0 ) return null;
 				if(keyCnt.size() > 1){
 					ValueComparator vc = new ValueComparator();
@@ -92,7 +96,7 @@ if(test)
 		/*List<LinkTag> links = MyUtil.parseTags(page.html, LinkTag.class, "class", "fc03 m2a");
 		for(LinkTag link:links){
 			keys.add(link.getLinkText());
-			if(test) System.out.println(link.getLinkText());
+			if(test) logger.info(link.getLinkText());
 		}*/
 //		
 		return keys;
@@ -123,7 +127,7 @@ if(test)
 		String searchKeys[] = new String[]{"hdu", "2289"};
 		PageData pg = MyUtil.getPage(url, false);
 		WpPosts post = new Spider4163().parseArticleSUrl(pg, searchKeys);
-		System.out.println(post.listContent.get(0).text);
+		logger.info(post.listContent.get(0).text);
 	}
 
 	

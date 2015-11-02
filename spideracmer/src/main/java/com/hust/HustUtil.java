@@ -37,14 +37,14 @@ public class HustUtil {
 		// getProblemData (returnHustId("ZOJ", "1123"));
 		//getProblemData("19438");
 //		String test = "hello \\\" \\r\\n world";
-//		System.out.println(test);
+//		logger.info(test);
 		
-		//System.out.println(getAcCode("HDU", "2773"));
+		//logger.info(getAcCode("HDU", "2773"));
 		List<String[]> allKeys = getAllProblems("Binary Operation",new String[]{"HDU","3754"});
 //		
 		if(allKeys != null){
 			for(String[] keys:allKeys){
-				System.out.println(keys[0] + " " + keys[1]);
+				logger.info(keys[0] + " " + keys[1]);
 			}
 		}
 		//returnHustIdNew("hdu", "Math Magic");
@@ -89,7 +89,7 @@ public class HustUtil {
 			int stat = response.getStatusLine().getStatusCode();
 			String json = "", line = null;
 			logger.info("stat:" + stat);
-//			System.out.println(stat);
+//			logger.info(stat);
 			if (stat == 200) {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					response.getEntity().getContent()));
@@ -100,22 +100,22 @@ public class HustUtil {
 			 }
 			List<String[]> ansList = new ArrayList<String[]>();
 			//logger.info("json:" +json);
-			///System.out.println("json:" + json);
+			///logger.info("json:" + json);
 			Gson gson = new Gson();
 			Hust hustData = gson.fromJson(json, Hust.class);
 
 			String realId = returnHustIdNew(keys[0], keys[1]);
 			String desOrigin = getDes5(realId);
-			// System.out.println(hustData.getAaData().size());
+			// logger.info(hustData.getAaData().size());
 			for (String[] datas: hustData.data) {
 				if (datas[2].trim().equals(title)){
-					//System.out.println("list.get(2).toString():" + list.get(2).toString());
+					//logger.info("list.get(2).toString():" + list.get(2).toString());
 					
 					//realId = ((Double) list.get(5)).intValue() + "";
 					String ojId =datas[1];
 					String oj = datas[0];
 					String curDes = getDes5(datas[5]);
-					//System.out.println(curDes);
+					//logger.info(curDes);
 					if(title.split(" ").length == 1){
 						if(desOrigin.equals(curDes)){
 							String[] ttkeys= new String[]{oj,ojId};
@@ -128,7 +128,7 @@ public class HustUtil {
 				
 				}
 			}
-			//System.out.println("Hust的Id:" + realId);
+			//logger.info("Hust的Id:" + realId);
 			EntityUtils.consume(response.getEntity());
 			String ansListString = "";
 			for(String[] tmp:ansList){
@@ -144,7 +144,7 @@ public class HustUtil {
 	
 	public static String getDes5(String realId){
 		ProblemData pm = getProblemData(realId);
-		//System.out.println(pm.text);
+		//logger.info(pm.text);
 		logger.info("realId :" + realId);
 		String parseHtml = "<div class=mydivParse>" + pm.text + "</div>";
 		Div div = MyUtil.parseTags(parseHtml, Div.class, "class", "mydivParse").get(0);
@@ -192,7 +192,7 @@ public class HustUtil {
 			}
 			if (title == null)
 				return null;
-			//System.out.println(title);
+			//logger.info(title);
 			String resJson = getProDesJson(id);
 			String proText = StringUtils.substringBetween(resJson, "s0.description=\"", "\";s0.hint");
 
@@ -208,7 +208,7 @@ public class HustUtil {
 	
 	public static String getAcCode(String oj,String problem){
 		logger.debug("get HUST getAcCode: " + oj + " " + problem);
-//System.out.println("get HUST getAcCode: " + oj + " " + problem);
+//logger.info("get HUST getAcCode: " + oj + " " + problem);
 		oj = oj.toUpperCase();
 		HttpClient client = new DefaultHttpClient();
 		String secho = getSEcho(oj);
@@ -224,7 +224,7 @@ public class HustUtil {
 			HttpResponse response = client.execute(post);
 			int stat = response.getStatusLine().getStatusCode();
 			String json = "", line = null;
-			//System.out.println(stat);
+			//logger.info(stat);
 			if (stat == 200) {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(
 						response.getEntity().getContent()));
@@ -235,12 +235,12 @@ public class HustUtil {
 			 }
 			//[2197082,"ShineCheng",29813,"Accepted",244,0,"G++",3670,1398605868000,28510,2,"HDU","2773",null,0,0,0],
 			//[1068344,"orzywmorz",29813,"Accepted",280,0,"C++",1958,1365513982000,22564,0,"HDU","2773",21853,0,0,0]
-//System.out.println("getAcCode:" + json);
+//logger.info("getAcCode:" + json);
 			EntityUtils.consume(response.getEntity());
 			Gson gson = new Gson();
 			FetchResult result = gson.fromJson(json, FetchResult.class);
 			String realId = null;
-			// System.out.println(hustData.getAaData().size());
+			// logger.info(hustData.getAaData().size());
 			if(result == null || result.data== null || result.data.length == 0) return null;
 			for (String[] data : result.data) {
 
@@ -292,7 +292,7 @@ public class HustUtil {
 				"&probNum=" +URLEncoder.encode(problem)+
 				"&title=&source=";
 
-		System.out.println(postData);
+		logger.info(postData);
 		HttpPost post = new HttpPost(postData);
 		initPost(post, "application/json, text/javascript, */*; q=0.01", "application/x-www-form-urlencoded");
 
@@ -303,7 +303,7 @@ public class HustUtil {
 			int stat = response.getStatusLine().getStatusCode();
 
 			String json = "", line = null;
-			//System.out.println(stat);
+			//logger.info(stat);
 			if (stat == 200) {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					response.getEntity().getContent()));
@@ -313,7 +313,7 @@ public class HustUtil {
 				 return null;
 			 }
 			logger.info("json:" + json);
-			//System.out.println(json);
+			//logger.info(json);
 			Gson gson = new Gson();
 			Hust hustData = gson.fromJson(json, Hust.class);
 
@@ -325,7 +325,7 @@ public class HustUtil {
 					realId = datas[datas.length-3];
 			}
 
-			//System.out.println("Hust的Id:" + realId);
+			//logger.info("Hust的Id:" + realId);
 			EntityUtils.consume(response.getEntity());
 			return realId;
 		} catch (Exception e) {
@@ -362,7 +362,7 @@ public class HustUtil {
 //			int stat = response.getStatusLine().getStatusCode();
 //
 //			String json = "", line = null;
-//			System.out.println(stat);
+//			logger.info(stat);
 //			if (stat == 200) {
 //			BufferedReader reader = new BufferedReader(new InputStreamReader(
 //					response.getEntity().getContent()));
@@ -371,19 +371,19 @@ public class HustUtil {
 //			 }else{
 //				 return null;
 //			 }
-//			// System.out.println(json);
+//			// logger.info(json);
 //			Gson gson = new Gson();
 //			Hust hustData = gson.fromJson(json, Hust.class);
 //
 //			String realId = null;
-//			// System.out.println(hustData.getAaData().size());
+//			// logger.info(hustData.getAaData().size());
 //			/*for (Object obj : hustData.getAaData()) {
 //				List list = (List) obj;
 //				if (list.get(1).toString().equals(problem))
 //					realId = ((Double) list.get(5)).intValue() + "";
 //			}
 //*/
-//			System.out.println("Hust的Id:" + realId);
+//			logger.info("Hust的Id:" + realId);
 //			EntityUtils.consume(response.getEntity());
 //			return realId;
 //		} catch (Exception e) {
@@ -418,12 +418,12 @@ public class HustUtil {
 				"http://acm.hust.edu.cn/vjudge/dwr/call/plaincall/judgeService.fetchDescriptions.dwr");
 		initPost(post, "*/*", "text/plain");
 		data = data.replaceAll("\\&", "\n");
-		//System.out.println(data);
+		//logger.info(data);
 		try {
 			post.setEntity(new StringEntity(data));
 
 			HttpResponse response = client.execute(post);
-			//System.out.println(response.getStatusLine().getStatusCode());
+			//logger.info(response.getStatusLine().getStatusCode());
 			String json = "", line = null;
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					response.getEntity().getContent()));

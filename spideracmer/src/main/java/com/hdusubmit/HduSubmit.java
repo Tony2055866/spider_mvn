@@ -94,7 +94,7 @@ public class HduSubmit {
 					if(res) break;
 				}
 				logger.info(i + " 提交成功");
-				//System.out.println(i + " 提交成功");
+				//logger.info(i + " 提交成功");
 				Thread.sleep(2000);
 			}
 
@@ -142,11 +142,11 @@ public class HduSubmit {
 
 		HttpResponse response = client.execute(post, context);
 		int stat = response.getStatusLine().getStatusCode();
-		//System.out.println(stat);
+		//logger.info(stat);
 		EntityUtils.consume(response.getEntity());
 		if (stat == 302) {
 			logger.info("login success! ");
-			//System.out.println("login success! ");
+			//logger.info("login success! ");
 			isLogin = true;
 			return;
 		}
@@ -199,14 +199,14 @@ public class HduSubmit {
 
 		HttpResponse response = client.execute(post, context);
 		int stat = response.getStatusLine().getStatusCode();
-		//System.out.println("after submit:" + Util.convertStreamToString(response.getEntity().getContent()));
+		//logger.info("after submit:" + Util.convertStreamToString(response.getEntity().getContent()));
 
 		
 		EntityUtils.consume(response.getEntity());
 		
 		
 		if (stat == 302) {
-			//System.out.println("submit success! ");
+			//logger.info("submit success! ");
 			logger.info("submit success!");
 			Thread.sleep(2000);
 			return getRes(problem);
@@ -241,7 +241,7 @@ public class HduSubmit {
 			}
 			EntityUtils.consume(subResponse.getEntity());
 		}
-		//System.out.println(total);
+		//logger.info(total);
 		if (total.contains("<font color=red>accepted</font>"))
 			return true;
 

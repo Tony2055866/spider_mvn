@@ -7,6 +7,10 @@ import com.model.WpPostsDAO;
 import com.util.Init;
 
 public class TestSavePost {
+
+	static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(TestSavePost.class);
+
+	
 	public static void main(String[] args) {
 		
 		 WpPosts post= new WpPosts();
@@ -16,11 +20,11 @@ public class TestSavePost {
 			
 			post.setPostName( "article-" + System.currentTimeMillis());
 			post.setPostTitle("tttt");
-				post.setPostContent("context");
+		post.setPostContent("context");
 				
 			
 				pdao.save(post);
-				System.out.println("id:" + post.getId());
+				logger.info("id:" + post.getId());
 				//第一步存储结束！
 				post.setGuid(Init.host + "/?p=" + post.getId());
 				

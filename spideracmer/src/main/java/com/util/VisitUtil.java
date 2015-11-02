@@ -3,6 +3,10 @@ package com.util;
 import com.sqider.PageData;
 
 public class VisitUtil {
+
+	static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(VisitUtil.class);
+
+	
 	public static String[] urls = {
 		//"http://acmerblog.iteye.com/blog/2021816",
 		//"http://acmerblog.iteye.com/blog/2021514",
@@ -30,9 +34,9 @@ public class VisitUtil {
 			for(int i=0; i<cnt && !stop; i++){
 				for(int j=0; j<urls.length; j++){
 					PageData pd = MyUtil.getPage(urls[j]);
-					//System.out.println(pd.html);
+					//logger.info(pd.html);
 					if(pd.html.contains("您所在的IP地址对")){
-						System.out.println("检测到 爬虫！！");
+						logger.info("检测到 爬虫！！");
 						stop = true;
 						break;
 					}

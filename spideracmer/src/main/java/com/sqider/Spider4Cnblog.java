@@ -7,6 +7,7 @@ import com.model.WpTermTaxonomy;
 import com.util.CodeUtil;
 import com.util.MyUtil;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.log4j.Logger;
 import org.htmlparser.Node;
 import org.htmlparser.Tag;
 import org.htmlparser.nodes.TagNode;
@@ -19,6 +20,9 @@ import java.util.*;
 
 public class Spider4Cnblog extends Spider{
 
+	static Logger logger = Logger.getLogger(Spider4Cnblog.class);
+
+
 	static boolean test = false;
 	
 	public WpPosts parseArticleSUrl(PageData page,String[] searchKeys){
@@ -28,13 +32,13 @@ public class Spider4Cnblog extends Spider{
 	@Override
 	public WpPosts parseArticleSUrl(PageData page, String[] searchKeys, boolean isAddTag) {
 		WpPosts post = new WpPosts();
-		System.out.println("Spider4Cnblog 开始解析:" + page.url);
+		logger.info("Spider4Cnblog 开始解析:" + page.url);
 		Map<WpTermTaxonomy, Integer> keyCnt = new HashMap();
 		post.host = page.host;
 		try {
 			String title = getTitle(page);
 if(test)
-	System.out.println("文章标题:" + title);
+	logger.info("文章标题:" + title);
 			if(title == null) return null;
 			
 			if(searchKeys != null)
@@ -43,13 +47,13 @@ if(test)
 			
 			List<String> keys = getKeys(page);
 if(test)
-	System.out.println("keys: " + keys.size());
+	logger.info("keys: " + keys.size());
 			
 			Div contentDiv = MyUtil.parseTags(page.html, Div.class, "id", "cnblogs_post_body").get(0);
 //			contentDiv
 			String allString = contentDiv.getStringText();
 			
-			//System.out.println("allString: " + allString);
+			//logger.info("allString: " + allString);
 			//不爬 已经有HDU内容的
 			if(allString.contains("Problem Description") || allString.contains("Sample Input")
 					|| allString.contains("问题描述")){
@@ -63,7 +67,7 @@ if(test)
 			List<Map.Entry<WpTermTaxonomy,Integer>> sort=new ArrayList();  //存储所有的key 出现的次数
 			if(isAddTag){
 				Set<WpTermTaxonomy> set = getMatchKeys(keys, title, allString, keyCnt);
-				//System.out.println("keyCnt.size():" + keyCnt.size());
+				//logger.info("keyCnt.size():" + keyCnt.size());
 				//if( keyCnt.size() == 0 ) return null;
 				if(keyCnt.size() > 1){
 					ValueComparator vc = new ValueComparator();
@@ -84,7 +88,7 @@ if(test)
 			//searchKeys != null 表示是搜索的OJ题目，否则为普通文章
 			if(searchKeys != null && codeCnt > 3) return null;
 			
-			//System.out.println(power + " " + post.power);
+			//logger.info(power + " " + post.power);
 			//如果没有代码则返回！！
 			if(searchKeys != null && !hasCode){
 				
@@ -96,7 +100,7 @@ if(test)
 			//post.setWpCommentses(getCommets(post, page));
 			
 			power += checkCodePower(post);
-			//System.out.println(power + " " + post.power);
+			//logger.info(power + " " + post.power);
 			post.power += power;
 			post.listkeyCnt = sort;
 			post.hasCode = hasCode;
@@ -129,7 +133,7 @@ if(test)
 					)
 					&& !tag.toHtml().contains("class=\"brush:") //有bursh则不用更改了
 					) {
-			//	System.out.println(" ---------------------------");
+			//	logger.info(" ---------------------------");
 				cnt ++;
 				String lang = "cpp";
 				Div codeDiv = (Div)tag;
@@ -160,7 +164,7 @@ if(test)
 	}
 
 	private Content getCode(String str, Div codeDiv) {
-		//System.out.println("getCode:\n" + str);
+		//logger.info("getCode:\n" + str);
 		try {
 			List<PreTag> codes = MyUtil.parseTags(str, PreTag.class, null, null);
 			String orCodestr = "";
@@ -179,7 +183,7 @@ if(test)
 			return content;
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("博客园获取代码错误");
+			logger.info("博客园获取代码错误");
 			return null;
 		}
 	}
@@ -221,7 +225,7 @@ if(test)
 		WpPosts post = new Spider4Cnblog().parseArticleSUrl(pg, null,false);
 		for(Content con:post.listContent){
 			//if( con!=null && con.isCode)
-			System.out.println(con.text);
+			logger.info(con.text);
 		}
 	}
 	

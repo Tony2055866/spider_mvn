@@ -46,7 +46,7 @@ public class WpPostsDAO extends BaseHibernateDAO {
 
 	public void save(WpPosts transientInstance) {
 		log.debug("saving WpPosts instance:" + openCurrentSession().hashCode());
-		//System.out.println("saving WpPosts instance:" + openCurrentSession().hashCode());
+		//logger.info("saving WpPosts instance:" + openCurrentSession().hashCode());
 		try {
 //			Session session = openSession();
 //			//getSession().saveOrUpdate(getSession().merge( transientInstance) );

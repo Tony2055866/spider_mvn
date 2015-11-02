@@ -25,7 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   <%
 		String ip = request.getRemoteHost();
-		//System.out.println(ip);
+		//logger.info(ip);
   if(session.getAttribute("login") == null && !ip.equals("127.0.0.1") && !ip.equals("202.108.77.42")){
   	response.sendRedirect("index.jsp");
   }
@@ -40,7 +40,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    Process p = run.exec("tail -" + line + " " + "/server/apache-tomcat-8.0.0-RC5/logs/catalina.out");
     BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));  
     while ((line = input.readLine()) != null) {  
-        // System.out.println(line);  
+        // logger.info(line);  
         out.println( line + "<br>");
     }  
      %>

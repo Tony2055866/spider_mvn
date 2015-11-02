@@ -9,6 +9,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class Init {
+
+	static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(Init.class);
+
+	
 	public static Map<String,WpTermTaxonomy> catTermTaxMap = new HashMap<String,WpTermTaxonomy>();
 	public static Map<String,WpTermTaxonomy> tagTermTaxMap = new HashMap<String,WpTermTaxonomy>();
 	public static Set<String> catKeySet;
@@ -50,41 +54,41 @@ public class Init {
 		 List<WpTermTaxonomy> catTerms = cateDao.getCateTerms();
 		 for(WpTermTaxonomy term:catTerms){
 			String des = term.getDescription();
-//			System.out.println(term.getDescription());
+//			logger.info(term.getDescription());
 			des = des.trim().toLowerCase();
 			catTermTaxMap.put(term.getTerm().getName(), term);
 			if(des != null && des != ""){
 				String keyArr[] = des.split(";");
-				//System.out.println(term + " -> " + des);
-				for(int i=0; i<keyArr.length; i++){
+				//logger.info(term + " -> " + des);
+				for(int i=0; i < keyArr.length; i++){
 					catTermTaxMap.put(keyArr[i], term);
 				}
 			}
 		 }
-		 System.out.println("---------");
+		 logger.info("---------");
 		 List<WpTermTaxonomy> tagTerms = cateDao.getTagTerms();
-		 System.out.println(tagTerms.size());
+		 logger.info(tagTerms.size());
 		 for(WpTermTaxonomy term:tagTerms){
 				String des = term.getDescription();
-//				System.out.println(term.getDescription());
+//				logger.info(term.getDescription());
 				des = des.trim().toLowerCase();
 				tagTermTaxMap.put(term.getTerm().getName(), term);
 				if(des != null && des != ""){
 					String keyArr[] = des.split(";");
 					for(int i=0; i<keyArr.length; i++){
 						tagTermTaxMap.put(keyArr[i], term);
-						//System.out.println(keyArr[i] + " -> " + term.getDescription());
+						//logger.info(keyArr[i] + " -> " + term.getDescription());
 					}
 				}
 		  }
 		 catKeySet = catTermTaxMap.keySet();
 		 tagKeySet = tagTermTaxMap.keySet();
 	}
-	
+
 	public static void main(String[] args) {
 		init();
-		System.out.println(catTermTaxMap.get("leetcode"));
-		System.out.println(tagTermTaxMap.get("leetcode"));
+		logger.info(catTermTaxMap.get("leetcode"));
+		logger.info(tagTermTaxMap.get("leetcode"));
 	}
 
 }
