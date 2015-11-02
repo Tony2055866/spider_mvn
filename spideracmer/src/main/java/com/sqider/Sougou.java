@@ -46,8 +46,6 @@ public class Sougou extends SearchEngine{
 		url="http://www.sogou.com/web?ie=utf8&query="+ URLEncoder.encode(keys[0]);
 		for(int i=1; i<keys.length; i++) url += "+" + URLEncoder.encode(keys[i]);
 logger.info(url);
-		if(Main.out != null)
-			Main.out.println(url);		
 		
 		PageData pd = MyUtil.getPage(url ,false);
 		if(pd == null){

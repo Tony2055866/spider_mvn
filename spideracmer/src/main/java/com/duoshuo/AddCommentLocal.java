@@ -110,12 +110,12 @@ public class AddCommentLocal {
             if(line.trim().length() > 0)
                 comments.add(line.trim());
         }
-        logger.info(comments.size());
+        logger.info(comments.size()+"");
         List<WpComments> list = commentsDAO.findByCommentApproved("1");
         for(WpComments comm:list){
             comments.add(comm.getCommentContent());
         }
-        logger.info(comments.size());
+        logger.info(comments.size()+"");
         return comments;
     }
 

@@ -61,7 +61,7 @@ logger.info("文章标题:" + title);
 			Div contentDiv = MyUtil.parseTags(page.html, Div.class, "class", "article_content").get(0);
 //			contentDiv
 			String allString = contentDiv.getStringText();
-			if(debug) logger.info(contentDiv.toHtml());
+			//logger.debug(contentDiv.toHtml());
 
 			//不爬 已经有HDU内容的
 			if(searchKeys!=null &&   (allString.contains("Problem Description") || allString.contains("Sample Input")
@@ -220,10 +220,10 @@ logger.info("文章标题:" + title);
 	public static void main(String[] args) {
 		//Init.init();
 		//blog.csdn.net/hqu_fritz/article/details/39474493
-		String url = "http://blog.csdn.net/hqu_fritz/article/details/39474493";
-		String searchKeys[] = new String[]{"hdu", "3768"};
+		String url = "http://blog.csdn.net/libin56842/article/details/9629401";
+		String searchKeys[] = new String[]{"hdu", "4512"};
 		PageData pg = MyUtil.getPage(url, false);
-		WpPosts post = new Spider4Csdn().parseArticleSUrl(pg, null, false);
+		WpPosts post = new Spider4Csdn().parseArticleSUrl(pg, searchKeys, false);
 		logger.info("start print article content!! ");
 		if(post != null){
 			for(Content con:post.listContent){
@@ -231,6 +231,7 @@ logger.info("文章标题:" + title);
 				String text = con.text.replaceAll("class=\"brush", "xxxxxbrush");
 				text = text.replaceAll("class=\".+?\"", "");
 				text = text.replaceAll("xxxxxbrush", "class=\"brush");
+				logger.info("isCode:" + con.isCode + "  hasCode:" + post.hasCode);
 				logger.info(text);
 			}
 		}
@@ -286,30 +287,45 @@ logger.info("文章标题:" + title);
 					pre.removeAttribute("cols");
 					sb.append(pre.toTagHtml());
 				}
+
+				if(post.hasPro){
+					logger.info("post hasPro, add code Content");
+					post.listContent.add( new Content(pre.toHtml(), true,lang) );
+				}
+				
 			}else if(node instanceof Div && (node.toHtml().contains("code_snippet_id"))){
 				//logger.info("code_snippet_id div's html:" + node.toHtml());
 				List<PreTag> codes =MyUtil.parseTags(node.toHtml(), PreTag.class, "name", "code");
 				logger.info("codes.size : " + codes.size());
 				for(PreTag preCodeTag:codes){
-
+					String lang = "cpp";
 					if(StringUtils.isNotEmpty(preCodeTag.getAttribute("class")) && !preCodeTag.getAttribute("class").equals("null") ){
 						preCodeTag.removeAttribute("class");
-						preCodeTag.setAttribute("class", "'brush:" + preCodeTag.getAttribute("class")+"'");
+						preCodeTag.setAttribute("class", "'brush:" + preCodeTag.getAttribute("class") + "'");
+						lang = preCodeTag.getAttribute("class");
 					}else{
 						preCodeTag.removeAttribute("class");
 						preCodeTag.setAttribute("class", "'brush:cpp'");
 					}
 					//sb.append(preCodeTag.toTagHtml());
-				}
 
+					if(post.hasPro){
+						logger.info("post hasPro, add code Content");
+						post.listContent.add( new Content(preCodeTag.toHtml(), true,lang) );
+					}
+				}
 			}
 			else if(node instanceof TextNode){
+				
 				sb.append(node.getText());
 			}else{
 				sb.append("<" + node.getText() + ">");
 			}
 		}
-		post.listContent.add( new Content(sb.toString(), false,null) );
+		if(!post.hasPro){
+			logger.info("post not hasPro, add code Content");
+			post.listContent.add( new Content(sb.toString(), false,null) );
+		}
 		return cnt;
 	}
 	

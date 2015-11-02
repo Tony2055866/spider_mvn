@@ -29,8 +29,6 @@ public class Baidu extends SearchEngine {
 		url+="&pn=" + 0 + "&tn=sayh_1_dg&ie=utf-8";
 		
 logger.info(url);
-if(Main.out!=null)
-Main.out.println(url);
 		PageData pd = MyUtil.getPage(url, false);
 		
 		List<LinkTag> list = MyUtil.parseTags(pd.html, LinkTag.class, "data-click", null);

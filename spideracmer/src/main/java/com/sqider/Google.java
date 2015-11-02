@@ -31,8 +31,6 @@ public class Google extends SearchEngine {
 		for(int i=1; i<keys.length; i++) url += "+" + URLEncoder.encode(keys[i]);
 
 		logger.info(url);
-if(Main.out != null)
-Main.out.println(url);	
 		PageData pd = MyUtil.getPage(url, false);
 		//logger.info(pd.html);
 		if(pd == null){
