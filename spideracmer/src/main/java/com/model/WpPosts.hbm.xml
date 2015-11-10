@@ -14,10 +14,10 @@
             <column name="post_author" not-null="true" />
         </property>
         <property name="postDate" type="java.sql.Timestamp">
-            <column name="post_date" length="19" not-null="true" />
+            <column name="post_date" length="255" not-null="true" />
         </property>
         <property name="postDateGmt" type="java.sql.Timestamp">
-            <column name="post_date_gmt" length="19" not-null="true" />
+            <column name="post_date_gmt" length="255" not-null="true" />
         </property>
         <property name="postContent" type="java.lang.String">
             <column name="post_content" not-null="true" />
@@ -50,10 +50,10 @@
             <column name="pinged" length="65535" not-null="true" />
         </property>
         <property name="postModified" type="java.sql.Timestamp">
-            <column name="post_modified" length="19" not-null="true" />
+            <column name="post_modified" length="255" not-null="true" />
         </property>
         <property name="postModifiedGmt" type="java.sql.Timestamp">
-            <column name="post_modified_gmt" length="19" not-null="true" />
+            <column name="post_modified_gmt" length="255" not-null="true" />
         </property>
         <property name="postContentFiltered" type="java.lang.String">
             <column name="post_content_filtered" not-null="true" />
