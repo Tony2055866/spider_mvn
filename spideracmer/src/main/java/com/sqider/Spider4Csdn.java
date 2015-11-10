@@ -278,14 +278,15 @@ public class Spider4Csdn extends Spider{
 					lang = pre.getAttribute("class");
 					if(lang.trim().length() < 1) lang = "cpp";
 				}
-				pre.removeAttribute("class");
-				pre.setAttribute("class", "brush:" + lang);
-				pre.removeAttribute("rows");
-				pre.removeAttribute("cols");
-				pre.removeAttribute("code_snippet_id");
-				pre.removeAttribute("snippet_file_name");
+			
 				if(node instanceof PreTag){
 					sb.append(pre.toTagHtml());
+					pre.removeAttribute("class");
+					pre.setAttribute("class", "brush:" + lang);
+					pre.removeAttribute("rows");
+					pre.removeAttribute("cols");
+					pre.removeAttribute("code_snippet_id");
+					pre.removeAttribute("snippet_file_name");
 				}
 				else{
 					pre.setTagName("pre");
