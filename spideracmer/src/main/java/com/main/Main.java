@@ -470,33 +470,42 @@ public class Main {
 
     public static String getText(WpPosts post, boolean pro) throws Exception {
         String text = "";
+        //文章有题目时，直接整篇文章
+        if(post.listContent.size() == 1 && post.hasPro){
+            Content content = post.listContent.get(0);
+            if(post.pageData != null)
+                text += ImageUtil.modifyImgHtml(content.text, post.pageData);
+            else
+                text += ImageUtil.modifyImgHtml(content.text, new PageData(post.host,post.url));
+        }else {
+            if (pro && proData != null)
+                text = proData.text + "\n";
+            logger.info("post.listContent.size:" + post.listContent.size());
+            for (int i = 0; i < post.listContent.size(); i++) {
+                Content content = post.listContent.get(i);
+                if (content == null || content.text == null || content.text == "") continue;
+                if (!content.isCode) {
 
-        if (pro && proData != null)
-            text = proData.text + "\n";
-        logger.info("post.listContent.size:" + post.listContent.size());
-        for (int i = 0; i < post.listContent.size(); i++) {
-            Content content = post.listContent.get(i);
-            if (content == null || content.text == null || content.text == "") continue;
-            if (!content.isCode) {
-
-                content.text = content.text.replaceAll("href=\"http://.+?\"", "");
-                content.text = content.text.replaceAll("class=\"brush", "xxxxxbrush");
-                content.text = content.text.replaceAll("class=\".+?\"", "");
-                content.text = content.text.replaceAll("xxxxxbrush", "class=\"brush");
-                //	logger.info(content.text);
-                //post.hasPro 说明文章部分含有问题，则不插入该博客的文字部分 (163 新浪等除外)
-                if (!post.hasPro || !post.hasCode) {
-                    if (post.pageData != null)
-                        text += ImageUtil.modifyImgHtml(content.text, post.pageData);
-                    else
-                        text += ImageUtil.modifyImgHtml(content.text, new PageData(post.host, post.url));
+                    content.text = content.text.replaceAll("href=\"http://.+?\"", "");
+                    content.text = content.text.replaceAll("class=\"brush", "xxxxxbrush");
+                    content.text = content.text.replaceAll("class=\".+?\"", "");
+                    content.text = content.text.replaceAll("xxxxxbrush", "class=\"brush");
+                    //	logger.info(content.text);
+                    //post.hasPro 说明文章部分含有问题，则不插入该博客的文字部分 (163 新浪等除外)
+                    if (!post.hasPro || !post.hasCode) {
+                        if (post.pageData != null)
+                            text += ImageUtil.modifyImgHtml(content.text, post.pageData);
+                        else
+                            text += ImageUtil.modifyImgHtml(content.text, new PageData(post.host, post.url));
+                    }
+                } else {
+                    text += "<pre class=\"brush:" + content.lang + " \">";
+                    text += content.text.trim();
+                    text += "</pre>";
                 }
-            } else {
-                text += "<pre class=\"brush:" + content.lang + " \">";
-                text += content.text.trim();
-                text += "</pre>";
             }
         }
+        
         if (post.url != null)
             text += "参考：" + post.url;
         //logger.info("----------------");

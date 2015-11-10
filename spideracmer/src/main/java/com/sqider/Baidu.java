@@ -5,9 +5,11 @@ import com.util.MyUtil;
 import org.apache.log4j.Logger;
 import org.htmlparser.tags.LinkTag;
 
+import java.io.*;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Baidu extends SearchEngine {
 	static Logger logger = Logger.getLogger(Baidu.class);
@@ -52,13 +54,53 @@ logger.info(url);
 	}
 	
 	public static void main(String[] args) {
-		Baidu baidu = new Baidu();
+		/*Baidu baidu = new Baidu();
 		String[] keys = new String[]{"poj","1011"};
 		List<String> urls = new Baidu().search(keys, 30);
 		for(String s:urls){
 			logger.info(s);
 			//MyUtil.parseSearchUrl(s);
+		}*/
+		
+		int page = 10;
+		int i=0;
+		int max = 100000;
+		while(i<max){
+			String key = "\"password\" => string(32) site:mogujie.com";
+	String url = "https://www.baidu.com/s?wd=%22password%22%20%3D%3E%20string(32)%20site%3Amogujie.com&pn=" +
+			page+
+			"&oq=%22password%22%20%3D%3E%20string(32)%20site%3Amogujie.com&tn=baiduhome_pg&ie=utf-8&usm=1&rsv_idx=2&rsv_pq=cee039890000281d&rsv_t=db0eByMwc3vTTevuzocB5I9ViJETD5dVMqJjpGs1BwVoO19%2Fr4k9ay1FQ7Meby6zIwfv";
+			/*
+			String url="http://www.baidu.com/s?rn="+page+"&wd=" + URLEncoder.encode(key);
+			url+="&pn=" + 0 + "&tn=sayh_1_dg&ie=utf-8";*/
+			logger.info(url);
+			PageData pd = MyUtil.getPage(url, false);
+			//System.out.println(pd.html);
+
+			File file = new File("D:\\xiaomi\\mogujie2\\" + i + ".html");
+			try {
+				OutputStream outputStream = new FileOutputStream(file);
+				OutputStreamWriter w = new OutputStreamWriter(outputStream, "UTF-8");
+				w.write(pd.html);
+				w.flush();
+				w.close();
+				outputStream.close();
+
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			page += 10;
+			i++;
+			try {
+				Thread.sleep(new Random().nextInt(300));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
+		
 	}
 
 	@Override
