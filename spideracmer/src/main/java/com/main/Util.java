@@ -3,8 +3,7 @@ package com.main;
 
 import com.model.LogDAO;
 import com.model.WpPosts;
-import com.sqider.Content;
-import com.sqider.PageData;
+import com.sqider.*;
 import com.util.ImageUtil;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
@@ -121,7 +120,26 @@ public class Util {
 		}
 		return res;
 	}
-	
+
+	public static Spider getSpiderByUrl(String url){
+		Spider spider = null;
+		if (url.endsWith("blog.csdn.net") && !url.contains("m.blog.csdn")) {
+			spider = new Spider4Csdn();
+		} else if (url.endsWith("cnblogs.com")) {
+			spider = new Spider4Cnblog();
+		} else if (url.contains("blog.163.com")) {
+			spider = new Spider4163();
+		} else if (url.contains("blog.sina.com")) {
+			spider = new Spider4Sina();
+		} else if (url.contains("hi.baidu.com")) {
+			spider = new Spider4Baidu();
+		} else if (url.contains("shaidaima.com")) {
+			spider = new ShaiDaiMa();
+		} else if (url.contains("cppblog")) {
+			return new Spider4Cppblog();
+		}
+		return  spider;
+	}
 	
 	
 	public static void main(String[] args) {

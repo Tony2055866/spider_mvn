@@ -88,8 +88,8 @@ public class Main {
             start = Integer.parseInt(args[0]);
             end = Integer.parseInt(args[1]);
         } else {
-            start = 3752;
-            end = 3753;
+            start = 4466;
+            end = 4467;
         }
         if (args.length >= 3) {
             searchOrder = Integer.parseInt(args[2]);
@@ -464,7 +464,7 @@ public class Main {
         return "cpp";
     }
 
-    private static String getText(WpPosts post) throws Exception {
+    public static String getText(WpPosts post) throws Exception {
         return getText(post, true);
     }
 
@@ -485,7 +485,6 @@ public class Main {
                 Content content = post.listContent.get(i);
                 if (content == null || content.text == null || content.text == "") continue;
                 if (!content.isCode) {
-
                     content.text = content.text.replaceAll("href=\"http://.+?\"", "");
                     content.text = content.text.replaceAll("class=\"brush", "xxxxxbrush");
                     content.text = content.text.replaceAll("class=\".+?\"", "");
@@ -552,6 +551,8 @@ public class Main {
         }
         return null;
     }
+    
+   
 
     public static boolean isRightUrl(String artileUrl) {
         //logger.info("isRightUrl:" + artileUrl);

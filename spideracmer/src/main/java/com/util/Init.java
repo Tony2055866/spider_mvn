@@ -40,6 +40,7 @@ public class Init {
 		
 			if (System.getProperty("os.name") != null && System.getProperty("os.name").toLowerCase().contains("windows")) {
 				isWindows = true;
+				baseDownLoad = "F:\\img";
 			} else {
 				isWindows = false;
 				baseDownLoad = "/usr/local/acmerblog/img/";

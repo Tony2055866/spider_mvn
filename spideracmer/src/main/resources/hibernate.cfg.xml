@@ -27,7 +27,7 @@
 			org.hibernate.dialect.MySQLDialect
 		</property>
 		<property name="connection.url">
-			jdbc:mysql://localhost:3306/wordpress?characterEncoding=utf8
+			jdbc:mysql://www.acmerblog.com:3306/wordpress?characterEncoding=utf8
 		</property>
 		 <property name="connection.autoReconnect">true</property>
 		 <property name="connection.autoReconnectForPools">true</property>
@@ -39,14 +39,14 @@
 		<property name="hibernate.current_session_context_class">thread</property>
 		<property name="hibernate.connection.useUnicode">true</property>
 		<property name="connection.username">root</property>
-		<property name="connection.password">root</property>
+		<property name="connection.password">qwer1234</property>
 		<property name="connection.driver_class">
 			com.mysql.jdbc.Driver
 		</property>
 		<property name="show_sql">false</property>
 		<property name="connection.autocommit">true</property>
 		<property name="myeclipse.connection.profile">mysql</property>
-		 
+		<property name="hibernate.connection.zeroDateTimeBehavior">convertToNull</property>
 		
         
 		<mapping resource="com/model/WpPosts.hbm.xml" />

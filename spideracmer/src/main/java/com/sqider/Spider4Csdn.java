@@ -47,12 +47,14 @@ public class Spider4Csdn extends Spider{
 			logger.info("Spider4Csdn 开始解析:" + page.url);
 			Map<WpTermTaxonomy, Integer> keyCnt = new HashMap();
 			String title = getTitle(page);
-if(debug)
-logger.info("文章标题:" + title);
+			logger.info("文章标题:" + title);
 			if(title == null) return null;
 			
 			if(searchKeys != null)
-				if( !rightTitle(title,searchKeys)) return null;
+				if( !rightTitle(title,searchKeys)) {
+					logger.info("rightTitle false. " + title);
+					return null;
+				}
 			post.setPostTitle(title);
 			
 			List<String> keys = getKeys(page);
@@ -113,7 +115,10 @@ logger.info("文章标题:" + title);
 			boolean hasCode = codeCnt > 0;
 
 			if(searchKeys !=null){
-				if(codeCnt > 4) return null;
+				if(codeCnt > 4){
+					logger.info("codeCnt is too big. codeCnt:"+codeCnt );
+					return null;
+				}
 				if(codeCnt >= 2) post.power -= 200;
 			}
 			//如果没有代码则
@@ -220,8 +225,8 @@ logger.info("文章标题:" + title);
 	public static void main(String[] args) {
 		//Init.init();
 		//blog.csdn.net/hqu_fritz/article/details/39474493
-		String url = "http://blog.csdn.net/libin56842/article/details/9629401";
-		String searchKeys[] = new String[]{"hdu", "4512"};
+		String url = "http://blog.csdn.net/u011345136/article/details/40930379";
+		String searchKeys[] = new String[]{"hdu", "4466"};
 		PageData pg = MyUtil.getPage(url, false);
 		WpPosts post = new Spider4Csdn().parseArticleSUrl(pg, searchKeys, false);
 		logger.info("start print article content!! ");
@@ -275,8 +280,13 @@ logger.info("文章标题:" + title);
 				}
 				pre.removeAttribute("class");
 				pre.setAttribute("class", "brush:" + lang);
-				if(node instanceof PreTag)
+				pre.removeAttribute("rows");
+				pre.removeAttribute("cols");
+				pre.removeAttribute("code_snippet_id");
+				pre.removeAttribute("snippet_file_name");
+				if(node instanceof PreTag){
 					sb.append(pre.toTagHtml());
+				}
 				else{
 					pre.setTagName("pre");
 					pre.getEndTag().setTagName("pre");
@@ -285,16 +295,19 @@ logger.info("文章标题:" + title);
 					//pre.setEndTag(new PreTag());
 					pre.removeAttribute("rows");
 					pre.removeAttribute("cols");
+					pre.removeAttribute("code_snippet_id");
+					pre.removeAttribute("snippet_file_name");
+
 					sb.append(pre.toTagHtml());
 				}
 
 				if(post.hasPro){
 					logger.info("post hasPro, add code Content");
-					post.listContent.add( new Content(pre.toHtml(), true,lang) );
+					post.listContent.add(new Content(pre.toHtml(), true,lang) );
 				}
 				
 			}else if(node instanceof Div && (node.toHtml().contains("code_snippet_id"))){
-				//logger.info("code_snippet_id div's html:" + node.toHtml());
+				logger.info("code_snippet_id div's html:" + node.toHtml());
 				List<PreTag> codes =MyUtil.parseTags(node.toHtml(), PreTag.class, "name", "code");
 				logger.info("codes.size : " + codes.size());
 				for(PreTag preCodeTag:codes){
@@ -311,8 +324,10 @@ logger.info("文章标题:" + title);
 
 					if(post.hasPro){
 						logger.info("post hasPro, add code Content");
-						post.listContent.add( new Content(preCodeTag.toHtml(), true,lang) );
+						post.listContent.add(new Content(preCodeTag.toHtml(), true, lang));
+						cnt++;
 					}
+					
 				}
 			}
 			else if(node instanceof TextNode){
@@ -322,10 +337,12 @@ logger.info("文章标题:" + title);
 				sb.append("<" + node.getText() + ">");
 			}
 		}
-		if(!post.hasPro){
-			logger.info("post not hasPro, add code Content");
+		//if(!post.hasPro || cnt == 0){
+			logger.info("add remain code Content");
 			post.listContent.add( new Content(sb.toString(), false,null) );
-		}
+		/*}else{
+			post.hasPro = false;
+		}*/
 		return cnt;
 	}
 	
