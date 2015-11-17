@@ -32,6 +32,20 @@ import java.util.List;
 
 public class HustUtil {
 
+	static class ProDescJson{
+		private String description;
+
+		public String getDescription() {
+			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
+		}
+	}
+	
+	
+	
 	static Logger logger = LoggerFactory.getLogger(HustUtil.class);
 	public static void main(String[] args) {
 		// getProblemData (returnHustId("ZOJ", "1123"));
@@ -40,13 +54,15 @@ public class HustUtil {
 //		logger.info(test);
 		
 		//logger.info(getAcCode("HDU", "2773"));
-		List<String[]> allKeys = getAllProblems("Binary Operation",new String[]{"HDU","3754"});
+		/*List<String[]> allKeys = getAllProblems("Binary Operation",new String[]{"HDU","3754"});
 //		
 		if(allKeys != null){
 			for(String[] keys:allKeys){
 				logger.info(keys[0] + " " + keys[1]);
 			}
-		}
+		}*/
+
+		System.out.println(getDes5("213843"));
 		//returnHustIdNew("hdu", "Math Magic");
 	}
 	
@@ -141,12 +157,16 @@ public class HustUtil {
 		} 
 		return null;
 	}
-	
+
+	/**
+	 * 获取描述的开头部分，用户判断问题是否一致。
+	 * @param realId
+	 * @return
+	 */
 	public static String getDes5(String realId){
 		ProblemData pm = getProblemData(realId);
-		//logger.info(pm.text);
 		logger.info("realId :" + realId);
-		String parseHtml = "<div class=mydivParse>" + pm.text + "</div>";
+		String parseHtml = "<div class=mydivParse>" + pm.source + "</div>";
 		Div div = MyUtil.parseTags(parseHtml, Div.class, "class", "mydivParse").get(0);
 		//logger.info("div.toPlainTextString().trim():" + div.toPlainTextString().trim());
 		String desStr = div.toPlainTextString().trim();
@@ -174,36 +194,39 @@ public class HustUtil {
 		return oj;
 	}
 
-	
+	/**
+	 * 获取 问题描述
+	 * @param id
+	 * @return
+	 */
 	public static ProblemData getProblemData(String id) {
 		if (id == null)
 			return null;
-		PageData pd = MyUtil
+		ProblemData problemData = new ProblemData();
+		PageData pd = MyUtil.getPage("http://acm.hust.edu.cn/vjudge/dwr/fetchDescriptions.action?pid=" + id);
+		if(pd != null){
+			String data = pd.html;
+			ProDescJson[] proDescListJson = new Gson().fromJson(data, ProDescJson[].class);
+			if(proDescListJson != null && proDescListJson.length > 0){
+				//logger.info("proDescListJson:" + proDescListJson[0].getDescription());
+				problemData.source = proDescListJson[0].getDescription();
+			}
+		}
+
+		pd = MyUtil
 				.getPage("http://acm.hust.edu.cn/vjudge/problem/viewProblem.action?id="
 						+ id);
 		if (pd != null) {
 			Div titleDiv = MyUtil.parseTags(pd.html, Div.class, "class", "ptt")
 					.get(0);
-			String title = null;
 			for (int i = 0; i < titleDiv.getChildren().size(); i++) {
 				Node node = titleDiv.getChild(i);
 				if (node instanceof LinkTag)
-					title = ((LinkTag) node).getLinkText();
-			}
-			if (title == null)
-				return null;
-			//logger.info(title);
-			String resJson = getProDesJson(id);
-			String proText = StringUtils.substringBetween(resJson, "s0.description=\"", "\";s0.hint");
-
-			if(proText.length() > 10){
-				ProblemData problem = new ProblemData();
-				problem.text = StringEscapeUtils.unescapeJava(proText);
-				problem.title = title;
-				return problem;
+					problemData.title = ((LinkTag) node).getLinkText();
 			}
 		}
-		return null;
+		//logger.info("titme:" + problemData.title);
+		return problemData;
 	}
 	
 	public static String getAcCode(String oj,String problem){

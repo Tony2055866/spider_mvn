@@ -38,7 +38,7 @@ public class FixBlankBlogs {
         WpPostsDAO wpPostsDAO = new WpPostsDAO();
      // List<WpPosts> posts = wpPostsDAO.findAll(); from WpPosts
         Session session = wpPostsDAO.getSession();
-       Iterator<WpPosts> iter = session.createQuery("from WpPosts p where p.id=7479").iterate();
+       Iterator<WpPosts> iter = session.createQuery("from WpPosts").iterate();
         
         while (iter.hasNext()){
 //            WpPosts post = posts.get(i);
@@ -54,26 +54,26 @@ public class FixBlankBlogs {
                     !wpPosts.getPostTitle().contains("待解决")){
                 //System.out.println("start check post:" + post.getId());
                 //System.out.println(post.getPostContent());
-
+                String tmpContent = wpPosts.getPostContent();
                 try {
-                    wpPosts.setPostContent(new String(wpPosts.getPostContent().getBytes(),"utf-8"));
+                     tmpContent = new String(wpPosts.getPostContent().getBytes(),"utf-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                String content = StringUtils.substringBetween(wpPosts.getPostContent(), "<!-- problem end -->", "参考");
+                
+                String content = StringUtils.substringBetween(tmpContent, "<!-- problem end -->", "参考");
                 //System.out.println("content:" + content);
                // System.out.println(post.getPostContent().indexOf("problem end") + " " + post.getPostContent().indexOf("参考") + " " + post.getPostContent().length());
                 String url = "";
                 if(content != null && content.trim().isEmpty()){
 
-                    int urlIndex = wpPosts.getPostContent().lastIndexOf("参考：");
+                    int urlIndex = tmpContent.lastIndexOf("参考：");
                     if(urlIndex != -1 ){
-                         url = wpPosts.getPostContent().substring(urlIndex);
+                         url = tmpContent.substring(urlIndex);
                         if(url.contains("http")){
                             url = url.substring(url.indexOf("http"));
                         }
                     }
-
                     
                     if(url.isEmpty()) {
                         System.out.println("not found url");
@@ -125,15 +125,15 @@ public class FixBlankBlogs {
                             }
                             
                             
-                            int m = wpPosts.getPostContent().lastIndexOf("参考");
-                            String pro = wpPosts.getPostContent().substring(0, m);
+                            int m = tmpContent.lastIndexOf("参考");
+                            String pro = tmpContent.substring(0, m);
                             pro += finalText;
                             wpPosts.setPostContent(pro);
+                            wpPosts.setPostContent(new String(pro.getBytes(),"gbk"));
 
                             System.out.println("--------------------");
 //                            System.out.println(pro);
                         }
-
                        // System.out.println(wpPosts.getPostContent());
                         session.update(wpPosts);
                         session.flush();
