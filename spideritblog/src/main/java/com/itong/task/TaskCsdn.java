@@ -41,7 +41,7 @@ public class TaskCsdn extends MyTask{
 
 	static boolean test = true;
 	
-	public synchronized void work() {
+	/*public synchronized void work() {
 		if(!ItblogInit.local || !test){
 			super.work();
 			return;
@@ -84,7 +84,7 @@ public class TaskCsdn extends MyTask{
 			e.printStackTrace();
 		}
 		
-	}
+	}*/
 	
 	
 	public WpPosts parseArticle(String url) {

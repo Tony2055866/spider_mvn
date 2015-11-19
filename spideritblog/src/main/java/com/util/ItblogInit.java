@@ -46,10 +46,10 @@ public class ItblogInit {
 				isWindows = true;
 			} else {
 				isWindows = false;
-				imgbaseDownLoad = "/server/itblog/img/";
+				imgbaseDownLoad = "/opt/itblog/img/";
 				host = "http://www.51itong.net/";
-				logDir = "/server/logs/itblog";
-				hostPath = "/server/itblog/";
+				logDir = "/opt/logs/itblog";
+				hostPath = "/opt/itblog/";
 				local = false;
 			}
 		if(noload) return;
