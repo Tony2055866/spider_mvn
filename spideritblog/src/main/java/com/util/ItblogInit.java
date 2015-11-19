@@ -35,6 +35,8 @@ public class ItblogInit {
 	public static void init(){
 		init(false);
 	}
+	
+	
 	/**
 	 * 
 	 * @param noload true 则不加载数据库信息

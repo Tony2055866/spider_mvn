@@ -1,11 +1,13 @@
 package com.itong.task;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import com.util.ItblogInit;
 import org.apache.log4j.Logger;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.LinkTag;
@@ -78,6 +80,8 @@ public abstract class MyTask extends Thread {
 
 							ItblogUtil.saveCommPost(post,false); //投标记原文链接
 
+							deleteIndex();
+							
 							logger.info("deep crawl get : " + post.visitedUrlMap.size() +   " ; " + post.visitedUrlMap);
 
 							count ++;
@@ -103,8 +107,15 @@ public abstract class MyTask extends Thread {
 		}
 		
 	}
-	
-	
+
+	private void deleteIndex() {
+		String path = ItblogInit.hostPath + "wp-content/cache/supercache/www.51itong.net/index.html";
+		File file = new File(path);
+		file.delete();
+		
+		MyUtil.getPage(ItblogInit.host);
+	}
+
 
 	public abstract WpPosts parseArticle(String url);
 	
