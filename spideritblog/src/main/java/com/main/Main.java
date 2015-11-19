@@ -282,7 +282,6 @@ out.println("查找失败！！");
 	 * @param keys 搜索的关键词( hdu 1100 )
 	 * @param posts 搜索到的posts列表,结果保存在此列表
 	 * @param method  google优先还是百度优先。默认google优先. 
-	 * @param unfpost 数据库里存储的 待解决的文章
 	 * @throws Exception 
 	 */
 	public static void find(String[] keys, List<WpPosts> posts, int method) throws Exception{
@@ -505,33 +504,46 @@ Transaction tran = HibernateSessionFactory.openCurrentSession().beginTransaction
 	public static String getText(WpPosts post, boolean pro) throws Exception {
 		String text = "";
 		
-		if(pro && proData!=null)
-		  text = proData.text + "\n";
-		//System.out.println(proData.text);
-		for(int i=0; i<post.listContent.size(); i++){
-			Content content = post.listContent.get(i);
-			if(content == null || content.text == null || content.text == "") continue;
-			if(!content.isCode ){
-				
-				content.text = content.text.replaceAll("href=\"http://.+?\"", "");
-				content.text = content.text.replaceAll("class=\"brush", "xxxxxbrush");
-				content.text = content.text.replaceAll("class=\".+?\"", "");
-				content.text = content.text.replaceAll("xxxxxbrush", "class=\"brush");
-			//	System.out.println(content.text);
-				//post.hasPro 说明文章部分含有问题，则不插入该博客的文字部分 (163 新浪等除外)
-				if( !post.hasPro || !post.hasCode ){
-					if(post.pageData != null)
-						text += ImageUtil.modifyImgHtml(content.text, post.pageData);
-					else
-						text += ImageUtil.modifyImgHtml(content.text, new PageData(post.host,post.url));
+		//文章有题目时，直接整篇文章
+		if(post.listContent.size() == 1 && post.hasPro){
+			Content content = post.listContent.get(0);
+			if(post.pageData != null)
+				text += ImageUtil.modifyImgHtml(content.text, post.pageData);
+			else
+				text += ImageUtil.modifyImgHtml(content.text, new PageData(post.host,post.url));
+		}else {
+
+			if(pro && proData!=null)
+				text = proData.text + "\n";
+			//System.out.println(proData.text);
+			for(int i=0; i<post.listContent.size(); i++){
+				Content content = post.listContent.get(i);
+				if(content == null || content.text == null || content.text == "") continue;
+				if(!content.isCode ){
+
+					content.text = content.text.replaceAll("href=\"http://.+?\"", "");
+					content.text = content.text.replaceAll("class=\"brush", "xxxxxbrush");
+					content.text = content.text.replaceAll("class=\".+?\"", "");
+					content.text = content.text.replaceAll("xxxxxbrush", "class=\"brush");
+					//	System.out.println(content.text);
+					//post.hasPro 说明文章部分含有问题，则不插入该博客的文字部分 (163 新浪等除外)
+					if( !post.hasPro || !post.hasCode ){
+						if(post.pageData != null)
+							text += ImageUtil.modifyImgHtml(content.text, post.pageData);
+						else
+							text += ImageUtil.modifyImgHtml(content.text, new PageData(post.host,post.url));
+					}
+				}
+				else{
+					text += "<pre class=\"brush:" + content.lang + " \">";
+					text += content.text.trim();
+					text += "</pre>";
 				}
 			}
-			else{
-				text += "<pre class=\"brush:" + content.lang + " \">";
-				text += content.text.trim();
-				text += "</pre>";
-			}
+			
 		}
+		
+		
 		if(post.url != null)
 			text += "参考：<a href='#respond'>" + post.url + "</a>";
 		//System.out.println("----------------");

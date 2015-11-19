@@ -12,6 +12,12 @@ import com.main.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 public class ImageUtil {
 	static Logger logger = LoggerFactory.getLogger(ImageUtil.class);
 	//static String downLoadPaht ="D:\\PHP\\wordpress-3.7-zh_CN\\wordpress\\imgs\\poj\\";
@@ -59,6 +65,16 @@ public class ImageUtil {
 						realUrl = originUrl;
 					try{
 						String downLoadName = HttpDownload.download(realUrl , downLoadPath, refer);
+						String fullPath = downLoadPath;
+						if(!downLoadPath.endsWith(File.separator)) fullPath += File.separator;
+						fullPath += downLoadName;
+						File file = new File(fullPath);
+						BufferedImage sourceImg =ImageIO.read(new FileInputStream(file));
+						//设置大图属性
+						if(sourceImg.getWidth() > 650){
+							img.setAttribute("width", "650");
+							img.setAttribute("height", "" + sourceImg.getHeight()*650/sourceImg.getWidth());
+						}
 						//System.out.println("保存图片:" + downLoadPath + i);
 						//src="http://s3.51cto.com/wyfs02/M01/22/4C/wKioL1MaD4byGkhoAAI2j9TUy2E154.jpg" title="2222.jpg"
 //System.out.println("img.setAttribute:" + myhostImgBaseUrl  +downLoadName);
@@ -68,7 +84,8 @@ public class ImageUtil {
 							img.setAttribute("alt", Main.proData.title);
 						sb.append(img.toHtml());
 					}catch (Exception e){
-						logger.error("down img error : " + realUrl);
+						logger.error("down img error : " + realUrl, e);
+						e.printStackTrace();
 					}
 
 				}else if(node instanceof TextNode){
@@ -126,10 +143,12 @@ public class ImageUtil {
 						realUrl = orgHost + originUrl;
 					}else
 						realUrl = baseUrl + originUrl;
+					
 					if(originUrl.startsWith("http://"))
 						realUrl = originUrl;
 					
 					img.setAttribute("src", realUrl);
+					
 					sb.append(img.toHtml());
 				}else if(node instanceof TextNode){
 					sb.append(node.getText());
@@ -143,8 +162,17 @@ public class ImageUtil {
 		return sb.toString();
 	}
 	public static void main(String[] args) {
-		
-//		System.out.println("aa\\img".replaceAll("\\\\", "/"));
+		File file = new File("C:\\Users\\gaotong1\\Pictures\\gaotong1.png");
+		BufferedImage sourceImg = null;
+		try {
+			sourceImg = ImageIO.read(new FileInputStream(file));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(String.format("%.1f",file.length()/1024.0));
+		System.out.println(sourceImg.getWidth());
+		System.out.println(sourceImg.getHeight());
+		//		System.out.println("aa\\img".replaceAll("\\\\", "/"));
 		//System.out.println("../../../data/images/con208-1004-2.JPG".replaceAll("\\.\\./", "/").replaceAll("", replacement));
 	}
 }
