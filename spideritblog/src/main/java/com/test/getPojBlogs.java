@@ -1,5 +1,8 @@
 package com.test;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,10 +19,11 @@ public class getPojBlogs {
     public static String username="root";
     public static String password="root";
     public static String databaseName = "zJtjKTokkLUoGqQZMBkC";
-  
-   
-  
-    static {//注册驱动  
+
+	private static Logger logger = LoggerFactory.getLogger(getPojBlogs.class);
+
+
+	static {//注册驱动  
         try {  
             Class.forName("com.mysql.jdbc.Driver");  
         } catch (ClassNotFoundException e) {  
@@ -43,7 +47,7 @@ public class getPojBlogs {
 				String name = set.getString(2);
 				Long id = set.getLong(3);
 				if(cnt >= 500 && title.toUpperCase().startsWith("POJ")){
-					System.out.println("<a href=\"http://www.acmerblog.com/" + name + "-" + id  + "\">" + title + "</a><br>");
+					logger.info("<a href=\"http://www.acmerblog.com/" + name + "-" + id  + "\">" + title + "</a><br>");
 				}
 				cnt++;
 				//if(cnt >= 500) break;

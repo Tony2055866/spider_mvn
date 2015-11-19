@@ -30,9 +30,9 @@ public class CtoSpider extends Spider{
 			e.printStackTrace();
 		}
 		
-		//System.out.println(getBlogUrls(2).size());
-		//System.out.println(MyUtil.getPage("http://gaotong.blog.51cto.com/2385162/1369526").html);
-		//System.out.println(MyUtil.clearTitle("动态规划-最小编辑距离(Edit Distance)"));
+		//logger.info(getBlogUrls(2).size());
+		//logger.info(MyUtil.getPage("http://gaotong.blog.51cto.com/2385162/1369526").html);
+		//logger.info(MyUtil.clearTitle("动态规划-最小编辑距离(Edit Distance)"));
 		
 	}
 	
@@ -95,7 +95,7 @@ public class CtoSpider extends Spider{
 			//添加标签
 			if(isAddTag){
 				Set<WpTermTaxonomy> set = SpiderUtil.getMatchKeys(keys, title, allString, keyCnt);
-				//System.out.println("keyCnt.size():" + keyCnt.size());
+				//logger.info("keyCnt.size():" + keyCnt.size());
 				//if( keyCnt.size() == 0 ) return null;
 				if(keyCnt.size() > 1){
 					ValueComparator vc = new ValueComparator();
@@ -137,7 +137,7 @@ public class CtoSpider extends Spider{
 			str = str.replaceAll("href=\"http://.+?\"", "");
 			//<a href="http://s3.51cto.com/wyfs02/M02/1D/3D/wKioL1MYKSXhpQ2gAAEpRR0S2BI482.jpg" 
 			if(n instanceof PreTag && ((PreTag) n).getAttribute("class") != null){
-				//System.out.println("codestr: " + str);
+				//logger.info("codestr: " + str);
 				String code = n.toPlainTextString();
 				String lang = ((PreTag) n).getAttribute("class");
 				
@@ -151,13 +151,13 @@ public class CtoSpider extends Spider{
 					listCon.add(content1);
 				}
 				Content content2 = new Content(code, true, lang);
-				//System.out.println("有代码！！！" + lang + "\n" + code);
+				//logger.info("有代码！！！" + lang + "\n" + code);
 				listCon.add(content2);
 				
 				hasCode = true;
 				content = "";
 				codeCnt++;
-				//System.out.println(content2.text);
+				//logger.info(content2.text);
 			}else{
 				str.replaceAll("toolbar:false;", "");
 				content += str;
@@ -176,7 +176,7 @@ public class CtoSpider extends Spider{
 			pd = MyUtil.getPage("http://blog.51cto.com/original");
 		else
 			pd = MyUtil.getPage("http://blog.51cto.com/original/0/" + page);
-		//System.out.println(pd.html);
+		//logger.info(pd.html);
 		if(pd != null){
 			List<LinkTag> list = MyUtil.parseTags(pd.html, LinkTag.class, "china", "标题");
 			for(LinkTag link:list){
@@ -217,7 +217,7 @@ public class CtoSpider extends Spider{
 				}
 			}
 		}
-		//for(String key:keys) System.out.println(key);
+		//for(String key:keys) logger.info(key);
 		return keys;
 	}
 

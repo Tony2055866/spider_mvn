@@ -31,7 +31,7 @@ public class LogDAO extends BaseHibernateDAO {
 	public void save(Log transientInstance) {
 		log.debug("saving Log instance");
 		try {
-			//System.out.println("save log:" + transientInstance.getName() + "  " + transientInstance.getId());
+			//logger.info("save log:" + transientInstance.getName() + "  " + transientInstance.getId());
 			if(transientInstance.getUrl() == null) transientInstance.setUrl("");
 			
 			getSession().saveOrUpdate(transientInstance);

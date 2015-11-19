@@ -30,9 +30,8 @@ public class VisitUtil {
 			for(int i=0; i<cnt && !stop; i++){
 				for(int j=0; j<urls.length; j++){
 					PageData pd = MyUtil.getPage(urls[j]);
-					//System.out.println(pd.html);
+					//logger.info(pd.html);
 					if(pd.html.contains("您所在的IP地址对")){
-						System.out.println("检测到 爬虫！！");
 						stop = true;
 						break;
 					}

@@ -16,8 +16,13 @@ import com.model.WpPosts;
 import com.model.WpTermTaxonomy;
 import com.util.ItblogInit;
 import com.util.MyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Spider4Baidu extends Spider{
+
+	private static Logger logger = LoggerFactory.getLogger(Spider4Baidu.class);
+
 	static boolean test = true;
 	@Override
 	public WpPosts getArticleSUrl(PageData page) {
@@ -27,13 +32,13 @@ public class Spider4Baidu extends Spider{
 	
 	public WpPosts parseArticleSUrl(PageData page,String[] searchKeys){
 		WpPosts post = new WpPosts();
-System.out.println("Spider4Cnblog 开始解析:" + page.url);
+logger.info("Spider4Cnblog 开始解析:" + page.url);
 		Map<WpTermTaxonomy, Integer> keyCnt = new HashMap();
 		post.host = page.host;
 		try {
 			String title = getTitle(page);
 if(test)
-	System.out.println("文章标题:" + title);
+	logger.info("文章标题:" + title);
 			if(title == null) return null;
 			
 			//if( !rightTitle(title,searchKeys)) return null;
@@ -46,7 +51,7 @@ if(test)
 			//String allString = Util.getPlainHtml(contentDiv.toPlainTextString());
 			post.pageData = page;
 			//allString = ImageUtil.modifyImgHtml(allString, page);
-			//System.out.println("allString: " + allString);
+			//logger.info("allString: " + allString);
 			//不爬 已经有HDU内容的
 			if(allString.contains("Problem Description") || allString.contains("Sample Input")
 					|| allString.contains("问题描述")){
@@ -60,7 +65,7 @@ if(test)
 			List<Map.Entry<WpTermTaxonomy,Integer>> sort=new ArrayList();  //存储所有的key 出现的次数
 			if(true){
 				Set<WpTermTaxonomy> set = getMatchKeys(keys, title, allString, keyCnt);
-				//System.out.println("keyCnt.size():" + keyCnt.size());
+				//logger.info("keyCnt.size():" + keyCnt.size());
 				//if( keyCnt.size() == 0 ) return null;
 				if(keyCnt.size() > 1){
 					ValueComparator vc = new ValueComparator();
@@ -96,7 +101,7 @@ if(test)
 //		List<LinkTag> links = MyUtil.parseTags(tagDiv.toHtml(), LinkTag.class, null, null);
 //		for(LinkTag link:links){
 //			keys.add(link.getLinkText());
-//			if(test) System.out.println(link.getLinkText());
+//			if(test) logger.info(link.getLinkText());
 //		}
 //		
 		return keys;
@@ -127,7 +132,7 @@ if(test)
 		String searchKeys[] = new String[]{"hdu", "3000"};
 		PageData pg = MyUtil.getPage(url, false);
 		WpPosts post = new Spider4Baidu().parseArticleSUrl(pg, searchKeys);
-		System.out.println(post.listContent.get(0).text);
+		logger.info(post.listContent.get(0).text);
 		
 	}
 

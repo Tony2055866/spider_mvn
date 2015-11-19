@@ -23,11 +23,15 @@ import com.model.WpPosts;
 import com.model.WpTermTaxonomy;
 import com.util.ItblogInit;
 import com.util.MyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Spider4Cppblog extends Spider{
 
 public static boolean debug = true;
-	
+	private static Logger logger = LoggerFactory.getLogger(Spider4Cppblog.class);
+
+
 	public WpPosts parseArticleSUrl(PageData page,String[] searchKeys){
 		return parseArticleSUrl(page,searchKeys, true);
 	}
@@ -37,18 +41,18 @@ public static boolean debug = true;
 		 WpPosts post = new WpPosts();
 		 post.host = page.host;
 		try {
-			System.out.println("Spider4Cppblog 开始解析:" + page.url);
+			logger.info("Spider4Cppblog 开始解析:" + page.url);
 			Map<WpTermTaxonomy, Integer> keyCnt = new HashMap();
 			String title = getTitle(page);
 if(debug)
-System.out.println("文章标题:" + title);
+logger.info("文章标题:" + title);
 			if(title == null) return null;
 			if(searchKeys != null)
 				if( !rightTitle(title,searchKeys)) return null;
 			post.setPostTitle(title);
 			
 			List<String> keys = getKeys(page);
-//System.out.println("keys: " + keys.size());
+//logger.info("keys: " + keys.size());
 			List<Div> contents = MyUtil.parseTags(page.html, Div.class, "class", "postText");
 			if(contents.size() < 1){
 				contents = MyUtil.parseTags(page.html, Div.class, "class", "post");
@@ -56,7 +60,7 @@ System.out.println("文章标题:" + title);
 			Div contentDiv = contents.get(0);
 //			contentDiv
 			String allString = contentDiv.getStringText();
-			if(debug) System.out.println(contentDiv.toHtml());
+			if(debug) logger.info(contentDiv.toHtml());
 			post.power -= 50;
 			//不爬 已经有HDU内容的
 			if(allString.contains("Problem Description") || allString.contains("Sample Input")
@@ -110,7 +114,7 @@ System.out.println("文章标题:" + title);
 				 //return null;
 			 }
 			/*for(Content con:listCon){
-				System.out.println(con.text);
+				logger.info(con.text);
 			}*/
 			post.listContent = listCon;
 			//继续找评论   过段时间再找
@@ -121,19 +125,19 @@ System.out.println("文章标题:" + title);
 			post.hasCode = hasCode;
 			
 			post.url = page.url;
-			System.out.println("解析成功！！！！");
+			logger.info("解析成功！！！！");
 			return post;
 		} catch (Exception e) {
 		
 			e.printStackTrace();
-			//System.out.println("parse Html:-----------------\n" + page.html);
+			//logger.info("parse Html:-----------------\n" + page.html);
 			return null;
 		}
 		
 	}
 
 	private Content getCode(String str, boolean oj) {
-		System.out.println("getCode:" + str);
+		logger.info("getCode:" + str);
 		try {
 			List<PreTag> codes = MyUtil.parseTags(str, PreTag.class, "name", "code");
 			//LinkTag link = (LinkTag) spans.get(0).getChild(0);
@@ -154,7 +158,7 @@ System.out.println("文章标题:" + title);
 				if(oj)
 					if(! lang.toLowerCase().equals("java")) lang = "cpp";
 				
-				if(debug) System.out.println("code lang:" + lang);
+				if(debug) logger.info("code lang:" + lang);
 				return new Content(node1.getStringText(),true,lang);
 			}
 			return null;
@@ -191,9 +195,9 @@ System.out.println("文章标题:" + title);
 			
 			List<LinkTag> links = MyUtil.parseTags(str, LinkTag.class, "href", null);
 			//int len = spans.get(0).getChildCount();
-			//System.out.println("关键词个数： " + len);
+			//logger.info("关键词个数： " + len);
 			for(int i=0; i<links.size(); i++){
-				//System.out.println(spans.get(0).getChild(i));
+				//logger.info(spans.get(0).getChild(i));
 				LinkTag link =links.get(i);
 				keys.add(link.getLinkText());
 			}
@@ -203,12 +207,12 @@ System.out.println("文章标题:" + title);
 	
 	private Set<WpComments> getCommets(WpPosts post,PageData pg) {
 		
-		System.out.println(pg.url);
+		logger.info(pg.url);
 		String commentsUrl = pg.url.replace("article/details", "comment/list");
 		PageData pdata = MyUtil.getPage(commentsUrl, false);
 		Gson gson = new Gson();
 		CsdnCommentList list = gson.fromJson(pdata.html, CsdnCommentList.class);
-//		System.out.println(list.getList().length);
+//		logger.info(list.getList().length);
 		Set<WpComments> coms = new HashSet<WpComments>();
 		return coms;
 	}
@@ -223,7 +227,7 @@ System.out.println("文章标题:" + title);
 		if(post == null) return;
 		List<Map.Entry<WpTermTaxonomy,Integer>> keys = post.listkeyCnt;
 		for(Map.Entry<WpTermTaxonomy,Integer> t:keys){
-			System.out.println(t.getKey().getDescription() + "  => " + t.getValue());
+			logger.info(t.getKey().getDescription() + "  => " + t.getValue());
 		}
 	}
 	

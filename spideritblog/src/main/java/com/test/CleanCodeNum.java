@@ -15,7 +15,6 @@ public class CleanCodeNum {
 			}
 			res += line + "\n";
 		}
-		System.out.println(res);
 		
 	}
 }

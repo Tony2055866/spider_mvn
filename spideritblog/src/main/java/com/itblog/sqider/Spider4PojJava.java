@@ -20,8 +20,13 @@ import com.model.WpTermTaxonomyDAO;
 import com.util.ItblogInit;
 import com.util.MyUtil;
 import com.util.PojUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Spider4PojJava {
+
+	private static Logger logger = LoggerFactory.getLogger(Spider4PojJava.class);
+
 	public static String qnamediv = "<div ><h1 class=\"mytitle mybigtile\">";
 	public static String qnamediv2="</h1></div>";
 	
@@ -41,7 +46,7 @@ public class Spider4PojJava {
 	
 	//Java Tag
 	public static	WpTermTaxonomy termtax02 =wtdao.findById(66L);
-	//System.out.println(termtax01.getTerm().getName());
+	//logger.info(termtax01.getTerm().getName());
 	
 	//Poj  分类
 	public static	WpTermTaxonomy termtax03 =wtdao.findById(31L);
@@ -78,7 +83,7 @@ public class Spider4PojJava {
 		String surl = "http://www.java3z.com/cwbwebhome/article/article17/" +
 		StringUtils.substringBetween(url,"href=\"", "\">");
 		String num = StringUtils.substringBetween(url, ">", "<" );
-		System.out.println(surl + "   " + num);
+		logger.info(surl + "   " + num);
 		
 		
 		//获取代码页面 数据
@@ -141,7 +146,7 @@ public class Spider4PojJava {
 			}
 			
 		
-			//System.out.println(postText);
+			//logger.info(postText);
 			
 			WpPosts wpPosts = new WpPosts();
 			WpPostsDAO pdao = new WpPostsDAO();
@@ -177,7 +182,7 @@ public class Spider4PojJava {
 			
 			
 			pdao.save(wpPosts);
-			//System.out.println(wpPosts.getId());
+			//logger.info(wpPosts.getId());
 			
 			wpPosts.setGuid(ItblogInit.host + "/?p=" + wpPosts.getId());
 			wpPosts.getTerms().add(termtax01);
@@ -218,8 +223,8 @@ public class Spider4PojJava {
 	}
 	
 	private static void getTerms(WpPosts wpPosts, String text,String lang) {
-		//System.out.println("getTerms :");
-		//System.out.println(codeString);
+		//logger.info("getTerms :");
+		//logger.info(codeString);
 		for(String catKey: ItblogInit.catKeySet){
 			String tkey = catKey.toLowerCase();
 			if(text.toLowerCase().contains(tkey)){
@@ -231,7 +236,7 @@ public class Spider4PojJava {
 				}
 				WpTermTaxonomy tax = ItblogInit.catTermTaxMap.get(catKey);
 				wpPosts.getTerms().add(tax);
-				System.out.println("add new cat: " + catKey);
+				logger.info("add new cat: " + catKey);
 			}
 		}
 		for(String tagString: ItblogInit.tagKeySet){
@@ -242,7 +247,7 @@ public class Spider4PojJava {
 				
 				WpTermTaxonomy tax = ItblogInit.tagTermTaxMap.get(tagString);
 				wpPosts.getTerms().add(tax);
-				System.out.println("add new tag: " + tagString);
+				logger.info("add new tag: " + tagString);
 			}
 		}
 		
@@ -274,7 +279,7 @@ public class Spider4PojJava {
 			int sleepTime = 2000;
 			
 			if(args.length == 3){
-				//System.out.println("wrong args!"); return;
+				//logger.info("wrong args!"); return;
 				start = Integer.parseInt(args[0]);
 				end = Integer.parseInt(args[1]);
 				sleepTime = Integer.parseInt(args[2]);
@@ -285,7 +290,7 @@ public class Spider4PojJava {
 			for( i=start; i< urls.size(); i++){
 				if(urls.get(i).contains("acm603")){
 					start = i; 
-					System.out.println(urls.get(i));
+					logger.info(urls.get(i));
 					break;
 				}
 			}
@@ -308,8 +313,8 @@ public class Spider4PojJava {
 		
 //		Timestamp tm = new Timestamp(new Date().getTime());
 //		Timestamp tm2 = new Timestamp(tm.getTime() -  60 * 8 * 60 * 1000);
-//		System.out.println(tm.toLocaleString());
-//		System.out.println(tm2.toLocaleString());
+//		logger.info(tm.toLocaleString());
+//		logger.info(tm2.toLocaleString());
 	}
 	
 }

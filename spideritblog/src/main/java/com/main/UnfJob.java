@@ -12,9 +12,12 @@ import com.model.WpPostsDAO;
 import com.util.HibernateSessionFactory;
 import com.util.HojUtil;
 import com.util.ItblogInit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UnfJob {
-	
+	private static Logger logger = LoggerFactory.getLogger(UnfJob.class);
+
 	public static String from;
 	public static boolean fast = false;
 	public static void main(String[] args) {
@@ -36,7 +39,7 @@ public class UnfJob {
 					e.printStackTrace();
 				}
 			}
-			System.out.println(log.getName());
+			logger.info(log.getName());
 		}
 	}
 	
@@ -50,7 +53,7 @@ public class UnfJob {
 		Transaction tran = HibernateSessionFactory.openCurrentSession().beginTransaction();
 		Session session= HibernateSessionFactory.openCurrentSession();
 		List<WpPosts> postsList = session.createQuery("from WpPosts as p where p.postTitle like '%待解决%' and post_status='publish' order by p.id desc").list();
-		System.out.println(postsList.size());
+		//logger.info(postsList.size());
 		tran.commit();
 		unf = false;
 		//依次查找每一篇未完成的文章。重新搜索
@@ -69,11 +72,11 @@ public class UnfJob {
 				int start = Integer.parseInt(from);
 				if(proNum > start) continue;
 			}catch (Exception e) {
-				System.out.println("题目出错：" + unfpost.getPostTitle());
+				logger.info("题目出错：" + unfpost.getPostTitle());
 				
 				continue;
 			}
-			System.out.println("开始getUnfinished: "+ unfpost.getId() + "  :" + unfpost.getPostTitle());
+			logger.info("开始getUnfinished: "+ unfpost.getId() + "  :" + unfpost.getPostTitle());
 			String[] keys = new String[]{titles[0].toLowerCase(),key2};
 			WpPosts finalPost = Main.getFinalPost(keys);
 			
@@ -105,11 +108,11 @@ public class UnfJob {
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				System.out.println("查找失败，返回！");
+				logger.info("查找失败，返回！");
 				e.printStackTrace();
 				return;
 			}*/
-			//System.out.println("final post info:");
+			//logger.info("final post info:");
 			if(finalPost != null){
 				String mainKeyWord = Main.setMainTerms(finalPost);
 				String keyWordInTitle = mainKeyWord == null ? "": "-"+mainKeyWord+"-";
@@ -121,7 +124,7 @@ public class UnfJob {
 //						unfpost.getTerms().add(term);
 //					}
 //				}
-System.out.println("查找待解决题目成功:" + unfpost.getPostTitle());
+logger.info("查找待解决题目成功:" + unfpost.getPostTitle());
 				
 				wpdao.save(unfpost);
 			}

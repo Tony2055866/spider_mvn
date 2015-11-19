@@ -34,18 +34,11 @@ public class PojUtil {
 	public static void main(String[] args) {
 //		String des = "<img src=\"images/1046/color.gif\">";
 //		des = des.replaceAll("images","http://poj.org/"+ "images");
-//		System.out.println(des);
+//		logger.info(des);
 		
 		String test = "gao tong 	ni";
-		System.out.println(test.replaceAll("\\s+", "+"));
 		
 		
-		try {
-			System.out.println(URLEncoder.encode("ni-hao'，", "utf-8"));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 //	public static String baseDownLoad = "D:\\PHP\\wordpress-3.7-zh_CN\\wordpress\\img\\poj\\";
@@ -100,13 +93,13 @@ public class PojUtil {
 			while(des.endsWith("<br>")) des = des.substring(0, des.length()-4);
 			//handler the image tags
 			des = ImageUtil.modifyImgHtml(des,baseUrl,myhost,  refer,  baseDownLoad + problem + "-", "http://poj.org/" );
-			//System.out.println(des);
+			//logger.info(des);
 			
 			//input, output
 			List<PreTag> input = MyUtil.parseTags(pd.html, PreTag.class, "class", "sio");
 			String sampleInput = input.get(0).getStringText();
 			String sampleOutput = input.get(1).getStringText();
-			//System.out.println(titles.size());
+			//logger.info(titles.size());
 			
 			String postText = qnamediv + qName + qnamediv2 + "\n";
 			
@@ -139,7 +132,7 @@ public class PojUtil {
 				postText+= titledHint;
 				postText += "<div class=\"mypanel\">" + "\n";
 				postText += desHint.replaceAll("<br><br>", "\n") + "</div> " + "\n";
-				//System.out.println(desHint);
+				//logger.info(desHint);
 			}
 			
 			//postText += submitString.replaceAll("rrrrr", problem);

@@ -20,8 +20,13 @@ import com.model.WpPostsDAO;
 import com.model.WpTermTaxonomy;
 import com.util.ItblogInit;
 import com.util.MyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AddByArticleUrl {
+	
+	static Logger logger = LoggerFactory.getLogger(AddByArticleUrl.class);
+	
 	public static boolean isZhuan;
 	static{
 		if(ItblogInit.defautTerm == null){
@@ -34,14 +39,14 @@ public class AddByArticleUrl {
 	public static void addbyUrl(String artileUrl, Set<WpTermTaxonomy> set, int hours, String wpurl,
 			boolean addTag){
 		if(DbUtil.checkUrl(artileUrl)){
-			System.out.println("已存在");
+			logger.info("已存在");
 			return;
 		}
 	//	Transaction tran = HibernateSessionFactory.openCurrentSession().beginTransaction();
 		
 		ItblogInit.init(!addTag);
-System.out.println("延迟的小时数：" + hours);
-System.out.println("选择的标签个数:" + set.size());
+logger.info("延迟的小时数：" + hours);
+logger.info("选择的标签个数:" + set.size());
 		WpPostsDAO pdao = new WpPostsDAO();
 		WpPosts post = null;
 		
@@ -50,7 +55,7 @@ System.out.println("选择的标签个数:" + set.size());
 		post = parseUrl(artileUrl, tag);
 		
 		if(post == null){
-			System.out.println("获取的文章的null");
+			logger.info("获取的文章的null");
 			return;
 		}
 		
@@ -87,7 +92,7 @@ System.out.println("选择的标签个数:" + set.size());
 			log.setOther(post.getGuid());
 			new LogDAO().save(log);
 			
-			System.out.println("结束---------------------------");
+			logger.info("结束---------------------------");
 		//	tran.commit();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -111,7 +116,7 @@ System.out.println("选择的标签个数:" + set.size());
 			PageData pd = MyUtil.getPage(author_Url + "?viewmode=contents");
 			List<LinkTag> listLinks = MyUtil.parseTags(pd.html, LinkTag.class, "title", "阅读次数");
 			for(LinkTag link:listLinks){
-				System.out.println(link.getLink());
+				logger.info(link.getLink());
 			}
 			
 		}
@@ -121,14 +126,14 @@ System.out.println("选择的标签个数:" + set.size());
 	}
 	
 	public static WpPosts parseUrl(String artileUrl, boolean addTag){
-		//System.out.println(trueUrl + ":" + artileUrl);
+		//logger.info(trueUrl + ":" + artileUrl);
 		if(!isRightUrl(artileUrl)){
 			return null;
 		}
-System.out.println("parseUrl artileUrl: " + artileUrl);
+logger.info("parseUrl artileUrl: " + artileUrl);
 		PageData pd = MyUtil.getPage(artileUrl, true);
 		if(pd == null){
-			//System.out.println("获取页面数据失败！！  :" + artileUrl);
+			//logger.info("获取页面数据失败！！  :" + artileUrl);
 			return null;
 		}
 		Spider spider = null;
@@ -140,7 +145,7 @@ System.out.println("parseUrl artileUrl: " + artileUrl);
 			spider = new Spider4Cnblog();
 			return spider.parseArticleSUrl(pd , null, addTag);
 		}else{
-			System.out.println(pd.host);
+			logger.info(pd.host);
 		}
 		
 		return null;
@@ -161,7 +166,7 @@ System.out.println("parseUrl artileUrl: " + artileUrl);
 		
 		
 		//WpPosts post = parseUrl("http://blog.csdn.net/gladyoucame/article/details/14139459", false);
-		//System.out.println(post);
+		//logger.info(post);
 	}
 	
 

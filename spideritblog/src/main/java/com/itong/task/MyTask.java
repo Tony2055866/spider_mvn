@@ -28,7 +28,7 @@ public abstract class MyTask extends Thread {
 	Logger logger = Logger.getLogger(this.getClass());
 	
 	public static void main(String[] args) {
-		System.out.println(new Date().toLocaleString());
+//		logger.info(new Date().toLocaleString());
 	}
 	
 	public synchronized void restart(){

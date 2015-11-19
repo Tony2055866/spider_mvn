@@ -41,8 +41,13 @@ import com.util.HojUtil;
 import com.util.ImageUtil;
 import com.util.ItblogInit;
 import com.util.MyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
+	
+	private static Logger logger = LoggerFactory.getLogger(Main.class);
+	
 	public static WpTermTaxonomyDAO wtdao = new WpTermTaxonomyDAO();
 	public static WpTermTaxonomy termtaxHojCat ;
 	public static WpTermTaxonomy termtaxHojTag ;
@@ -91,7 +96,7 @@ public class Main {
 		if(!OJTask.ojlogFile.getParentFile().exists())
 			OJTask.ojlogFile.getParentFile().mkdirs();
 		if(!OJTask.ojlogFile.exists()) OJTask.ojlogFile.createNewFile();
-System.out.println("写入log：" +OJTask.ojlogFile.getAbsolutePath() );
+logger.info("写入log：" +OJTask.ojlogFile.getAbsolutePath() );
 out = new PrintStream(OJTask.ojlogFile);
 out.println("写入log：" +OJTask.ojlogFile.getAbsolutePath() );
 		getAnswer(); //开始调用，运行
@@ -134,13 +139,13 @@ out.println("出现错误，任务停止！！"+ ee.getMessage());
 	private static void getAnswer()  {
 		//统一用小写
 		String[] keys = new String[2];
-		System.out.println("start" + start + "  end " + end);
+		logger.info("start" + start + "  end " + end);
 		for( problem=start; problem< end && !OJTask.stop; problem++){
 			urlSet = new HashSet<String>();
 			keys[0] = ojtype;
 			keys[1] = problem+"";
 			
-System.out.println("start problem: " + problem  + "  "  + ojtype);
+logger.info("start problem: " + problem  + "  "  + ojtype);
 if(out!=null)
 	out.println("start problem: " + problem  + "  "  + ojtype);
 
@@ -154,7 +159,7 @@ if(out!=null)
 					int flag = savePostByKeys(keys);
 				} catch (Exception e) {
 					e.printStackTrace();
-					System.out.println("出现错误，停止！！");
+					logger.info("出现错误，停止！！");
 					if(out!=null) out.println("出现错误，停止！！");
 					return;
 				}
@@ -198,15 +203,15 @@ if(out!=null)
 		}
 		
 		WpPosts finalPost = getFinalPost(keys);
-		System.out.println("final post info:");
+		logger.info("final post info:");
 		
 		if(finalPost != null){
-			System.out.println(finalPost.url);
-			System.out.println(finalPost.power);
+			logger.info(finalPost.url);
+			logger.info(finalPost.power + "");
 			
 			savePost(finalPost, keys, log);
 		}else{
-System.out.println("查找失败！！");
+logger.info("查找失败！！");
 if(out!=null)
 out.println("查找失败！！");
 			if(log!=null && log.getFlag() != -1)
@@ -235,7 +240,7 @@ out.println("查找失败！！");
 	public static WpPosts getFinalPost(String[] keys) throws Exception {
 		// TODO Auto-generated method stub
 		List<WpPosts> posts = getFinalPosts(keys);
-		//System.out.println("找到结果返回, 结果个数：" + posts.size());
+		//logger.info("找到结果返回, 结果个数：" + posts.size());
 		WpPosts finalPost = null;
 		int maxPower = -1000;
 		for(WpPosts post:posts){
@@ -243,9 +248,9 @@ out.println("查找失败！！");
 				maxPower = post.power;
 				finalPost = post;
 			}
-			System.out.println("all post info:");
-			System.out.println(post.url);
-			System.out.println(post.power);
+			logger.info("all post info:");
+			logger.info(post.url);
+			logger.info("post.power:" + post.power);
 		}
 		return finalPost;
 	}
@@ -254,7 +259,7 @@ out.println("查找失败！！");
 	 */
 	public static List<WpPosts> getFinalPosts(String[] keys) throws Exception {
 		List<WpPosts> posts = new ArrayList<WpPosts>();
-		//System.out.println("");
+		//logger.info("");
 		  find(keys, posts);
 		if(posts.size()  < normalN ){
 			keys[0] = ojtypebak;
@@ -315,13 +320,13 @@ out.println("查找失败！！");
 
 			if(urls == null)
 				urls = new ArrayList<String>();
-System.out.println("搜索引擎找到的果个数：" + urls.size());
+logger.info("搜索引擎找到的果个数：" + urls.size());
 if(out!=null)
 out.println("搜索引擎找到的果个数：" + urls.size());
 			for(String url:urls){
-System.out.println("搜索" + i + " " + url);
+logger.info("搜索" + i + " " + url);
 				if(goodCnt >= findN || posts.size() > 5){
-					System.out.println("找到"+  findN +"篇文章，返回");
+					logger.info("找到"+  findN +"篇文章，返回");
 					if(out!=null)
 					out.println("查找失败！！");
 					return ;
@@ -355,7 +360,7 @@ System.out.println("搜索" + i + " " + url);
 //			post.setPostTitle(post.getPostTitle() + "[解题报告]");
 //		}
 		String postText = getText(post);
-		//System.out.println(postText);
+		//logger.info(postText);
 		savePost(post, mainKeyWord, postText, keys, log);
 	}
 
@@ -368,7 +373,7 @@ System.out.println("搜索" + i + " " + url);
 		
 		if(terms!=null){
 			if(debug)
-			System.out.println("add Term Num: " + terms.size());
+			logger.info("add Term Num: " + terms.size());
 			int cnt1=0,cnt2=0;
 			for(Map.Entry<WpTermTaxonomy,Integer> entry:terms){
 				WpTerms t = entry.getKey().getTerm();
@@ -376,12 +381,12 @@ System.out.println("搜索" + i + " " + url);
 				
 				if(mainKeyWord == null){
 					mainKeyWord = t.getName();
-System.out.println("main keyword: " + mainKeyWord);
+logger.info("main keyword: " + mainKeyWord);
 if(out!=null)
 out.println("main keyword: " + mainKeyWord);
 				}else{
 if(debug)
-System.out.println("keyword: " + t.getName());
+logger.info("keyword: " + t.getName());
 if(out!=null)
 out.println("keyword: " + t.getName());
 				//if(cnt >= 2) break;
@@ -400,7 +405,7 @@ out.println("keyword: " + t.getName());
 	
 	//存储没有 解决的题目
 	public static void savePostNotFinished(String[] keys) {
-System.out.println("存储为解决的题目！！！");
+logger.info("存储为解决的题目！！！");
 if(out!=null)
 out.println("存储为解决的题目！！！");
 	//	Transaction tran = HibernateSessionFactory.openCurrentSession().beginTransaction();
@@ -422,7 +427,7 @@ out.println("存储为解决的题目！！！");
 			post.setPostName(ojtype +"-" + keys[1] + "-" +ctitle);
 		
 		pdao.save(post);
-		//System.out.println(wpPosts.getId());
+		//logger.info(wpPosts.getId());
 		
 		post.setGuid(ItblogInit.host + "/?p=" + post.getId());
 		post.getTerms().add(termtaxHojCat);
@@ -461,7 +466,7 @@ out.println("存储为解决的题目！！！");
 		//post.setPostName(ojtype +"-" + keys[1] +"-" + MyUtil.clearTitle(proData.title));
 	
 		pdao.save(post);
-		//System.out.println(wpPosts.getId());
+		//logger.info(wpPosts.getId());
 		post.setGuid(ItblogInit.host + "/?p=" + post.getId());
 		post.getTerms().add(termtaxHojCat);
 		post.getTerms().add(termtaxHojTag);
@@ -470,7 +475,7 @@ out.println("存储为解决的题目！！！");
 		
 		//tran.commit();
 		
-System.out.println("---------------------------");
+logger.info("---------------------------");
 if(out!=null)
 out.println("-----------------------------------------------");
 Transaction tran = HibernateSessionFactory.openCurrentSession().beginTransaction();
@@ -515,7 +520,7 @@ Transaction tran = HibernateSessionFactory.openCurrentSession().beginTransaction
 
 			if(pro && proData!=null)
 				text = proData.text + "\n";
-			//System.out.println(proData.text);
+			//logger.info(proData.text);
 			for(int i=0; i<post.listContent.size(); i++){
 				Content content = post.listContent.get(i);
 				if(content == null || content.text == null || content.text == "") continue;
@@ -525,7 +530,7 @@ Transaction tran = HibernateSessionFactory.openCurrentSession().beginTransaction
 					content.text = content.text.replaceAll("class=\"brush", "xxxxxbrush");
 					content.text = content.text.replaceAll("class=\".+?\"", "");
 					content.text = content.text.replaceAll("xxxxxbrush", "class=\"brush");
-					//	System.out.println(content.text);
+					//	logger.info(content.text);
 					//post.hasPro 说明文章部分含有问题，则不插入该博客的文字部分 (163 新浪等除外)
 					if( !post.hasPro || !post.hasCode ){
 						if(post.pageData != null)
@@ -546,24 +551,24 @@ Transaction tran = HibernateSessionFactory.openCurrentSession().beginTransaction
 		
 		if(post.url != null)
 			text += "参考：<a href='#respond'>" + post.url + "</a>";
-		//System.out.println("----------------");
-		//System.out.println(text);
+		//logger.info("----------------");
+		//logger.info(text);
 		return text;
 	}
 
 	
 	//解析搜索到的链接. 并将连接传给相应网站的spider (百度)
 	public static WpPosts parseSearchUrl(String artileUrl, String[] searchKeys, boolean trueUrl){
-//System.out.println(trueUrl + ":" + artileUrl);
+//logger.info(trueUrl + ":" + artileUrl);
 		if(trueUrl && !isRightUrl(artileUrl)){
 			return null;
 		}
 if(debug )
-System.out.println("artileUrl: " + artileUrl);
+logger.info("artileUrl: " + artileUrl);
 		PageData pd = MyUtil.getPage(artileUrl, false);
 		if(pd == null){
 if(debug)
-System.out.println("获取页面数据失败！！  :" + artileUrl);
+logger.info("获取页面数据失败！！  :" + artileUrl);
 			return null;
 		}
 		if(urlSet.contains(pd.url)) return null;
@@ -594,7 +599,7 @@ System.out.println("获取页面数据失败！！  :" + artileUrl);
 	}
 
 	public static boolean isRightUrl(String artileUrl) {
-		//System.out.println("isRightUrl:" + artileUrl);
+		//logger.info("isRightUrl:" + artileUrl);
 		if(artileUrl.contains("blog.csdn") || artileUrl.contains("cnblogs.com") 
 				|| artileUrl.contains("blog.163.com") || artileUrl.contains("blog.sina.com") 
 				|| artileUrl.contains("hi.baidu.com") || artileUrl.contains("shaidaima") 

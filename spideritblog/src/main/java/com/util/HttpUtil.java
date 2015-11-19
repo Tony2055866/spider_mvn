@@ -7,6 +7,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -15,6 +17,7 @@ import java.io.InputStreamReader;
  * Created by Administrator on 2014/12/28.
  */
 public class HttpUtil {
+    private static Logger logger = LoggerFactory.getLogger(HttpUtil.class);
 
     public static  String sendPost(String data,String url){
         BasicHttpParams httpParams = new BasicHttpParams();
@@ -31,12 +34,11 @@ public class HttpUtil {
             HttpResponse response = client.execute(post);
             int stat = response.getStatusLine().getStatusCode();
             String json = "", line = null;
-            System.out.println(stat);
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     response.getEntity().getContent()));
             while ((line = reader.readLine()) != null)
                 json += line + "\n";
-//            System.out.println(json);
+//            logger.info(json);
             return json;
         } catch (Exception e) {
             e.printStackTrace();

@@ -34,7 +34,7 @@ public class WpTermTaxonomyDAO extends BaseHibernateDAO {
 	public static final String COUNT = "count";
 
 	public void save(WpTermTaxonomy transientInstance) {
-		//System.out.println("saving WpTermTaxonomy instance:" + openCurrentSession().hashCode());
+		//logger.info("saving WpTermTaxonomy instance:" + openCurrentSession().hashCode());
 		try {
 //			Session session = openSession();
 //			session.saveOrUpdate( transientInstance );
@@ -105,7 +105,6 @@ public class WpTermTaxonomyDAO extends BaseHibernateDAO {
 				 session = HibernateSessionFactory.openSession();
 			}else
 				session = openCurrentSession();
-			System.out.println(session.hashCode());
 			Query queryObject = session.createQuery(queryString);
 			
 			queryObject.setParameter(0, value);

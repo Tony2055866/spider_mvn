@@ -30,8 +30,13 @@ import org.htmlparser.tags.TableRow;
 
 import com.itong.main.ItblogUtil;
 import com.util.MyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LeetCode {
+
+	private static Logger logger = LoggerFactory.getLogger(LeetCode.class);
+
 	static HttpContext context;
 	static DefaultHttpClient  client;
 	private String title = "";
@@ -44,7 +49,7 @@ public class LeetCode {
 		 context = new BasicHttpContext();
 		String html = MyUtil.getPage("https://oj.leetcode.com/accounts/login/", false, client, context).html;
 		String csrfmiddlewaretoken = StringUtils.substringBetween(html, "csrfmiddlewaretoken' value='", "'");
-		System.out.println(csrfmiddlewaretoken);
+		logger.info(csrfmiddlewaretoken);
 		try {
 //			HttpResponse responseTest = client.execute(get, context);
 //			EntityUtils.consume(responseTest.getEntity());
@@ -83,10 +88,10 @@ public class LeetCode {
 					String line = null;
 					while ((line = br.readLine()) != null) {
 						total += line+ "\n";
-						// System.out.println(line);
+						// logger.info(line);
 					}
 				}
-				System.out.println(total);*/
+				logger.info(total);*/
 				
 				 EntityUtils.consume(response.getEntity());
 				 
@@ -96,7 +101,7 @@ public class LeetCode {
 				 for(LinkTag link:links){
 					 
 					 if(link.getLink().startsWith("/problems")){
-						// System.out.println(link.getStringText().toString());
+						// logger.info(link.getStringText().toString());
 						 map.put(link.getStringText().toString(), "https://oj.leetcode.com" + link.getLink().toString());
 					 }
 				 }
@@ -118,7 +123,7 @@ public class LeetCode {
 		if(javaCode == null && pythonCode == null){
 			if(map.get(title) == null) return;
 			String url = map.get(title) + "submissions/";
-			System.out.println(url);
+			logger.info(url);
 			String text = MyUtil.getPage(url, false, client, context).html;
 			String table = StringUtils.substringBetween(text, "<tbody>", "</tbody>");
 			List<TableRow> rows = MyUtil.parseTags(table, TableRow.class, null, null);
@@ -161,16 +166,16 @@ public class LeetCode {
 	public static void main(String[] args) {
 		/*LeetCode l = new LeetCode("Min Stack");
 		String text = MyUtil.getPage("https://oj.leetcode.com/profile/", false, client, context).html;
-		System.out.println(text);*/
-		//System.out.println(map.get("Valid Palindrome"));
+		logger.info(text);*/
+		//logger.info(map.get("Valid Palindrome"));
 		
-		//System.out.println(map.size());
-		//System.out.println(map.keySet());
+		//logger.info(map.size());
+		//logger.info(map.keySet());
 		
 		LeetCode l = new LeetCode("Min Stack");
 		l.initCode();
 		
-		System.out.println(l.javaCode);
+		logger.info(l.javaCode);
 	}
 	
 	

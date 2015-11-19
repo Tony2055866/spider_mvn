@@ -39,22 +39,25 @@ import com.itblog.sqider.PageData;
 import com.itblog.sqider.PreTag;
 import com.itblog.sqider.ProblemData;
 import com.util.MyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HustUtil {
 
-	
+	private static Logger logger = LoggerFactory.getLogger(HustUtil.class);
+
 	public static void main(String[] args) {
 		// getProblemData (returnHustId("ZOJ", "1123"));
 //		getProblemData("19438");
 //		String test = "hello \\\" \\r\\n world";
-//		System.out.println(test);
+//		logger.info(test);
 		
-		//System.out.println(getAcCode("HDU", "2777"));
+		//logger.info(getAcCode("HDU", "2777"));
 		List<String[]> allKeys = getAllProblems("Jack of All Trades",new String[]{"HDU","2777"});
 //		
 		if(allKeys != null){
 			for(String[] keys:allKeys){
-				System.out.println(keys[0] + " " + keys[1]);
+				logger.info(keys[0] + " " + keys[1]);
 			}
 		}
 		
@@ -84,7 +87,6 @@ public class HustUtil {
 			HttpResponse response = client.execute(post, context);
 			int stat = response.getStatusLine().getStatusCode();
 			String json = "", line = null;
-			System.out.println(stat);
 			if (stat == 200) {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					response.getEntity().getContent()));
@@ -94,23 +96,23 @@ public class HustUtil {
 				 return null;
 			 }
 			List<String[]> ansList = new ArrayList<String[]>();
-			// System.out.println(json);
+			// logger.info(json);
 			Gson gson = new Gson();
 			Hust hustData = gson.fromJson(json, Hust.class);
 
 			String realId = returnHustId(keys[0], keys[1]);
 			String desOrigin = getDes5(realId);
-			// System.out.println(hustData.getAaData().size());
+			// logger.info(hustData.getAaData().size());
 			for (Object obj : hustData.getAaData()) {
 				List list = (List) obj;
 				if (list.get(2).toString().trim().equals(title)){
-					//System.out.println("list.get(2).toString():" + list.get(2).toString());
+					//logger.info("list.get(2).toString():" + list.get(2).toString());
 					
 					//realId = ((Double) list.get(5)).intValue() + "";
 					String ojId = list.get(1).toString();
 					String oj = list.get(0).toString();
 					String curDes = getDes5(realId);
-					System.out.println(curDes);
+					logger.info(curDes);
 					if(title.split(" ").length == 1){
 						if(desOrigin.equals(curDes)){
 							String[] ttkeys= new String[]{oj,ojId};
@@ -123,7 +125,7 @@ public class HustUtil {
 				
 				}
 			}
-			//System.out.println("Hust的Id:" + realId);
+			//logger.info("Hust的Id:" + realId);
 			EntityUtils.consume(response.getEntity());
 			return ansList;
 		} catch (Exception e) {
@@ -134,7 +136,7 @@ public class HustUtil {
 	
 	public static String getDes5(String realId){
 		ProblemData pm = getProblemData(realId);
-		//System.out.println(pm.text);
+		//logger.info(pm.text);
 		String parseHtml = "<div class=mydivParse>" + pm.text + "</div>";
 		Div div = MyUtil.parseTags(parseHtml, Div.class, "class", "mydivParse").get(0);
 		String ans = div.toPlainTextString().trim().substring(0,20);
@@ -179,7 +181,7 @@ public class HustUtil {
 			}
 			if (title == null)
 				return null;
-			//System.out.println(title);
+			//logger.info(title);
 			String resJson = getProDesJson(id);
 			String proText = StringUtils.substringBetween(resJson, "s0.description=\"", "\";s0.hint");
 
@@ -194,7 +196,7 @@ public class HustUtil {
 	}
 	
 	public static String getAcCode(String oj,String problem){
-System.out.println("get HUST getAcCode: " + oj + " " + problem);
+logger.info("get HUST getAcCode: " + oj + " " + problem);
 		oj = oj.toUpperCase();
 		HttpClient client = new DefaultHttpClient();
 		String secho = getSEcho(oj);
@@ -210,7 +212,7 @@ System.out.println("get HUST getAcCode: " + oj + " " + problem);
 			HttpResponse response = client.execute(post);
 			int stat = response.getStatusLine().getStatusCode();
 			String json = "", line = null;
-			//System.out.println(stat);
+			//logger.info(stat);
 			if (stat == 200) {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(
 						response.getEntity().getContent()));
@@ -219,16 +221,16 @@ System.out.println("get HUST getAcCode: " + oj + " " + problem);
 			 }else{
 				 return null;
 			 }
-System.out.println(json);
+logger.info(json);
 			Gson gson = new Gson();
 			Hust hustData = gson.fromJson(json, Hust.class);
 			String realId = null;
-			// System.out.println(hustData.getAaData().size());
+			// logger.info(hustData.getAaData().size());
 			if(hustData == null || hustData.getAaData() == null || hustData.getAaData().size() == 0) return null;
 			for (Object obj : hustData.getAaData()) {
 				List list = (List) obj;
-//				for(Object o:list) System.out.println(o);
-//				System.out.println(list.size());
+//				for(Object o:list) logger.info(o);
+//				logger.info(list.size());
 				if (list.get(10).toString().equals("2.0"))
 				{
 					return getCodebyRunId( ((Double)list.get(0)).intValue() + "");
@@ -273,7 +275,6 @@ System.out.println(json);
 			int stat = response.getStatusLine().getStatusCode();
 
 			String json = "", line = null;
-			System.out.println(stat);
 			if (stat == 200) {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					response.getEntity().getContent()));
@@ -282,19 +283,19 @@ System.out.println(json);
 			 }else{
 				 return null;
 			 }
-			// System.out.println(json);
+			// logger.info(json);
 			Gson gson = new Gson();
 			Hust hustData = gson.fromJson(json, Hust.class);
 
 			String realId = null;
-			// System.out.println(hustData.getAaData().size());
+			// logger.info(hustData.getAaData().size());
 			for (Object obj : hustData.getAaData()) {
 				List list = (List) obj;
 				if (list.get(1).toString().equals(problem))
 					realId = ((Double) list.get(5)).intValue() + "";
 			}
 
-			System.out.println("Hust的Id:" + realId);
+			logger.info("Hust的Id:" + realId);
 			EntityUtils.consume(response.getEntity());
 			return realId;
 		} catch (Exception e) {
@@ -329,12 +330,11 @@ System.out.println(json);
 				"http://acm.hust.edu.cn/vjudge/dwr/call/plaincall/judgeService.fetchDescriptions.dwr");
 		initPost(post, "*/*", "text/plain");
 		data = data.replaceAll("\\&", "\n");
-		//System.out.println(data);
+		//logger.info(data);
 		try {
 			post.setEntity(new StringEntity(data));
 
 			HttpResponse response = client.execute(post);
-			System.out.println(response.getStatusLine().getStatusCode());
 			String json = "", line = null;
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					response.getEntity().getContent()));

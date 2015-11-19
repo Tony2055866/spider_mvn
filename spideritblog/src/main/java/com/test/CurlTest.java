@@ -11,12 +11,11 @@ public class CurlTest {
 			 url = args[0];
 		}
 		//Process p = run.exec("curl -L "  + url);
-		System.out.println("curl -L "  + url);
 //		String line;
 //		    BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));  
 //		    while ((line = input.readLine()) != null) {  
-//		        // System.out.println(line);  
-//		       System.out.println(line);
+//		        // logger.info(line);  
+//		       logger.info(line);
 //		    }  
 	}
 }

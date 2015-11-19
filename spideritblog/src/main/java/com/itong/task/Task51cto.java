@@ -49,9 +49,9 @@ public class Task51cto extends MyTask{
 					continue;
 				}
 				try {
-					System.out.println(url);
+					logger.info(url);
 					WpPosts post = ctospider.parseUrl(url, true);
-					//System.out.println(Util.getText(post));
+					//logger.info(Util.getText(post));
 					ItblogUtil.saveCommPost(post,false);
 					count ++;
 				} catch (Exception e) {

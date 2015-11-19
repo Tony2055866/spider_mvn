@@ -23,8 +23,11 @@ import org.apache.http.util.EntityUtils;
 import com.google.gson.Gson;
 import com.hust.HustUtil;
 import com.itblog.sqider.Comment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CommetSubmit {
+	private static Logger logger = LoggerFactory.getLogger(CommetSubmit.class);
 
 	public static void main(String[] args) {
 		/*String data="short_name=51itong&sercret=d6d143d5c83dfde9d7ccd726639ec462" +
@@ -70,12 +73,11 @@ data = "http://api.duoshuo.com/users/import.json?" + URLEncoder.encode(data);
 			HttpResponse response = client.execute(post);
 			int stat = response.getStatusLine().getStatusCode();
 			String json = "", line = null;
-			System.out.println(stat);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					response.getEntity().getContent()));
 			while ((line = reader.readLine()) != null)
 				json += line + "\n";
-			System.out.println(json);
+			logger.info(json);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 

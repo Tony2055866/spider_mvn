@@ -33,10 +33,13 @@ public class TaskCsdn extends MyTask{
 	
 	public static void main(String[] args) {
 //		instance.start();
-		ItblogInit.init();
+		/*ItblogInit.init();
 		MyTask task = TaskCsdn.getTask();
 		task.start();
-		task.restart();
+		1447938034693
+		1447852341798955
+		task.restart();*/
+//		logger.info(System.currentTimeMillis());
 	}
 
 	static boolean test = true;
@@ -72,7 +75,7 @@ public class TaskCsdn extends MyTask{
 					logger.info("deep crawl get : " + post.visitedUrlMap.size() +   " ; " + post.visitedUrlMap);
 					count ++;
 					remain --;
-					System.out.println("sleep time :" + sleeptimePerUrl * 1000 + ";   after, save: "+ post.url);
+					logger.info("sleep time :" + sleeptimePerUrl * 1000 + ";   after, save: "+ post.url);
 					Thread.sleep(sleeptimePerUrl * 1000);
 				}
 				

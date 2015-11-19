@@ -96,10 +96,10 @@ public class ItblogUtil {
 		String text = "";
 		for(int i=0; i<post.listContent.size(); i++){
 			Content content = post.listContent.get(i);
-			//System.out.println(content.text);
+			//logger.info(content.text);
 			if(content == null) continue;
 			if(!content.isCode ){
-				System.out.println("--------------------------------");
+				logger.info("--------------------------------");
 //				content.text = content.text.replaceAll("href=\"http://.+?\"", "");
 
 				content.text = content.text.replaceAll("class=\".+?\"", "");
@@ -209,14 +209,14 @@ public class ItblogUtil {
 
 
 	public static void main(String[] args) {
-		/*System.out.println(StringEscapeUtils.unescapeHtml4("&nbsp; &nbsp; &nbsp;").trim().replaceAll("[\\s\\u00A0]+$", ""));
-		System.out.println(StringEscapeUtils.unescapeHtml4("&nbsp;").equals(" "));
-		System.out.println((int)StringEscapeUtils.unescapeHtml4("&nbsp;").charAt(0));
-		System.out.println((int)' ');
-		System.out.println("&nbsp; &nbsp;".replaceAll("&nbsp;", "dd"));*/
+		/*logger.info(StringEscapeUtils.unescapeHtml4("&nbsp; &nbsp; &nbsp;").trim().replaceAll("[\\s\\u00A0]+$", ""));
+		logger.info(StringEscapeUtils.unescapeHtml4("&nbsp;").equals(" "));
+		logger.info((int)StringEscapeUtils.unescapeHtml4("&nbsp;").charAt(0));
+		logger.info((int)' ');
+		logger.info("&nbsp; &nbsp;".replaceAll("&nbsp;", "dd"));*/
 //		delete("index.html");
 		String orgin = "href=\"www.baidu.com\",,abcda,href=\"www.baidu.com123\",,href=\"www.baidu.com' ";
-		System.out.println(orgin.replaceAll("href=[\"']www.baidu.com[\"']", ""));
+		logger.info(orgin.replaceAll("href=[\"']www.baidu.com[\"']", ""));
 	}
 
 	/**
@@ -239,7 +239,7 @@ public class ItblogUtil {
 		String mainKeyWord = null;
 
 		if(terms!=null){
-//			System.out.println("add Term Num: " + terms.size());
+//			logger.info("add Term Num: " + terms.size());
 			logger.info("setMainTerms, all terms num: " + terms.size());
 			int cnt1=0,cnt2=0;
 			for(Entry<WpTermTaxonomy, Integer> entry:terms){
@@ -313,7 +313,7 @@ public class ItblogUtil {
 		}
 		post.setPostName(posturl);
 		pdao.save(post);
-		//System.out.println(wpPosts.getId());
+		//logger.info(wpPosts.getId());
 		post.setGuid(ItblogInit.host + "/?p=" + post.getId());
 		ItblogUtil.setMainTerms(post); //设置分类目录
 		if(post.getTerms().size() == 0)

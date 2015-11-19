@@ -28,11 +28,13 @@ import com.model.WpPosts;
 import com.model.WpTermTaxonomy;
 import com.util.CodeUtil;
 import com.util.MyUtil;
+import org.slf4j.LoggerFactory;
 
 public class Spider4Csdn extends Spider{
-	
+
+	private static org.slf4j.Logger logger = LoggerFactory.getLogger(Spider4Csdn.class);
+
 	public static boolean debug = false;
-	Logger logger = Logger.getLogger(this.getClass());
 	
 	public WpPosts parseArticleSUrl(PageData page,String[] searchKeys){
 		return parseArticleSUrl(page,searchKeys, true);
@@ -45,23 +47,23 @@ public class Spider4Csdn extends Spider{
 		 WpPosts post = new WpPosts();
 		 post.host = page.host;
 		try {
-//			System.out.println("Spider4Csdn 开始解析:" + page.url);
+//			logger.info("Spider4Csdn 开始解析:" + page.url);
 			logger.info("Spider4Csdn 开始解析:" + page.url);
 			Map<WpTermTaxonomy, Integer> keyCnt = new HashMap();
 			String title = getTitle(page);  // 1. 解析标题
 if(debug)
-System.out.println("文章标题:" + title);
+logger.info("文章标题:" + title);
 			if(title == null) return null;
 			
 			post.setPostTitle(title);
 			
 			List<String> keys = getKeys(page);
-//System.out.println("keys: " + keys.size());
+//logger.info("keys: " + keys.size());
 			
 			Div contentDiv = MyUtil.parseTags(page.html, Div.class, "class", "article_content").get(0);
 //			contentDiv
 			String allString = contentDiv.getStringText();
-			if(debug) System.out.println(contentDiv.toHtml());
+			if(debug) logger.info(contentDiv.toHtml());
 
 			if(ItblogUtil.checkAd(allString)){
 				return null;
@@ -80,19 +82,19 @@ System.out.println("文章标题:" + title);
 			if(isAddTag){
 				ItblogUtil.parseKeys(post);
 			}
-//			System.out.println("解析成功！！！！");
+//			logger.info("解析成功！！！！");
 			logger.info("解析成功！！！！");
 			return post;
 		} catch (Exception e) {
 			e.printStackTrace();
-			//System.out.println("parse Html:-----------------\n" + page.html);
+			//logger.info("parse Html:-----------------\n" + page.html);
 			return null;
 		}
 		
 	}
 
 	private Content getCode(String str, boolean oj) {
-		//System.out.println("getCode:" + str);
+		//logger.info("getCode:" + str);
 		try {
 			List<PreTag> codes = MyUtil.parseTags(str, PreTag.class, "name", "code");
 			//LinkTag link = (LinkTag) spans.get(0).getChild(0);
@@ -112,7 +114,7 @@ System.out.println("文章标题:" + title);
 				if(oj)
 					if(! lang.toLowerCase().equals("java")) lang = "cpp";
 				
-				if(debug) System.out.println("code lang:" + lang);
+				if(debug) logger.info("code lang:" + lang);
 				return new Content(node1.getStringText(),true,lang);
 			}
 			return null;
@@ -145,9 +147,9 @@ System.out.println("文章标题:" + title);
 			
 			List<LinkTag> links = MyUtil.parseTags(str, LinkTag.class, "href", null);
 			//int len = spans.get(0).getChildCount();
-			//System.out.println("关键词个数： " + len);
+			//logger.info("关键词个数： " + len);
 			for(int i=0; i<links.size(); i++){
-				//System.out.println(spans.get(0).getChild(i));
+				//logger.info(spans.get(0).getChild(i));
 				LinkTag link =links.get(i);
 				keys.add(link.getLinkText());
 			}
@@ -156,12 +158,12 @@ System.out.println("文章标题:" + title);
 	}
 	
 	private Set<WpComments> getCommets(WpPosts post,PageData pg) {
-		System.out.println(pg.url);
+		logger.info(pg.url);
 		String commentsUrl = pg.url.replace("article/details", "comment/list");
 		PageData pdata = MyUtil.getPage(commentsUrl, false);
 		Gson gson = new Gson();
 		CsdnCommentList list = gson.fromJson(pdata.html, CsdnCommentList.class);
-//		System.out.println(list.getList().length);
+//		logger.info(list.getList().length);
 		Set<WpComments> coms = new HashSet<WpComments>();
 		return coms;
 	}
@@ -175,16 +177,16 @@ System.out.println("文章标题:" + title);
 		WpPosts post = new Spider4Csdn().parseArticleSUrl(pg, null, false);
 		if(post != null){
 			for(Content con:post.listContent){
-				//System.out.println(con.text + "\n --------------------");
+				//logger.info(con.text + "\n --------------------");
 				String text = con.text.replaceAll("class=\"brush", "xxxxxbrush");
 				text = text.replaceAll("class=\".+?\"", "");
 				text = text.replaceAll("xxxxxbrush", "class=\"brush");
-				System.out.println(text);
+				logger.info(text);
 			}
 		}
 //		List<Map.Entry<WpTermTaxonomy,Integer>> keys = post.listkeyCnt;
 //		for(Map.Entry<WpTermTaxonomy,Integer> t:keys){
-//			System.out.println(t.getKey().getDescription() + "  => " + t.getValue());
+//			logger.info(t.getKey().getDescription() + "  => " + t.getValue());
 //		}
 	}
 	

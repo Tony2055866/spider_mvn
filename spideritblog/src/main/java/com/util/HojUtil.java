@@ -17,8 +17,13 @@ import org.htmlparser.tags.HeadingTag;
 import com.itblog.sqider.PageData;
 import com.itblog.sqider.PreTag;
 import com.itblog.sqider.ProblemData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HojUtil {
+
+	private static Logger logger = LoggerFactory.getLogger(HojUtil.class);
+
 	public static String qnamediv = "<div ><h1 class=\"mytitle mybigtile\">";
 	public static String qnamediv2="</h1></div>";
 	
@@ -38,7 +43,7 @@ public class HojUtil {
 	public static void main(String[] args) {
 		try {
 			ProblemData pd = getPorblemStr("1065", true);
-			System.out.println(pd.text);
+			logger.info(pd.text);
 		} catch (Exception e) {
 			
 			e.printStackTrace();
@@ -51,9 +56,9 @@ public class HojUtil {
 	
 	public static ProblemData getPorblemStr(String problem, boolean isDownImg) throws Exception{
 		ProblemData pdata = new ProblemData();
-		System.out.println("getPorblemStr:"+problem);
+		logger.info("getPorblemStr:"+problem);
 		PageData pd = MyUtil.getPage("http://acm.hdu.edu.cn/showproblem.php?pid=" + problem, false, "gb2312",null,null,null);
-		//System.out.println(pd.html);
+		//logger.info(pd.html);
 		try {
 			//title
 			List<HeadingTag> title = MyUtil.parseTags(pd.html,  HeadingTag.class, "style", null);
@@ -111,8 +116,8 @@ public class HojUtil {
 				 cnt++;
 			 }
 			 if(pd.html.contains("Sample Output")){
-				// System.out.println(cnt);
-				// System.out.println(divs.get(cnt).toHtml());
+				// logger.info(cnt);
+				// logger.info(divs.get(cnt).toHtml());
 				 sampleOutput = ( (Div)divs.get(cnt).getChild(0).getFirstChild() ).getStringText();
 				 if(isDownImg)
 				 sampleOutput = ImageUtil.modifyImgHtml(sampleOutput, pd);
@@ -147,11 +152,11 @@ public class HojUtil {
 			//des = des.replaceAll("\\.\\./", "/");
 				
 			//des = ImageUtil.modifyImgHtml(des,"http://acm.hdu.edu.cn/showproblem.php/",Init.host,  refer,  Init.baseDownLoad + File.separator  + "hdu-" + problem + "-", "http://acm.hdu.edu.cn/" );
-			//System.out.println(des);
+			//logger.info(des);
 			//input, output
 			List<PreTag> input = MyUtil.parseTags(pd.html, PreTag.class, "class", "sio");
 		
-			//System.out.println(titles.size());
+			//logger.info(titles.size());
 			
 			String postText = qnamediv + qName + qnamediv2 + "\n";
 			
@@ -191,7 +196,7 @@ public class HojUtil {
 				postText+= titledHint;
 				postText += "<div class=\"mypanel\">" + "\n";
 				postText += desHint.replaceAll("<br><br>", "\n") + "</div> " + "\n";
-				//System.out.println(desHint);
+				//logger.info(desHint);
 			}*/
 			//postText += submitString.replaceAll("rrrrr", problem);
 //			postText+= titledSamOutput;
@@ -200,7 +205,7 @@ public class HojUtil {
 			pdata.text = postText;
 			pdata.title = qName;
 			
-			//System.out.println(postText);
+			//logger.info(postText);
 			
 			return pdata;
 		} catch (Exception e) {

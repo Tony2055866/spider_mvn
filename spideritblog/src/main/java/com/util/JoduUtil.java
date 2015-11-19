@@ -89,10 +89,10 @@ public class JoduUtil {
 					String line = null;
 					while ((line = br.readLine()) != null) {
 						total += line+ "\n";
-						// System.out.println(line);
+						// logger.info(line);
 					}
 				}
-				System.out.println(total);*/
+				logger.info(total);*/
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -121,7 +121,7 @@ public class JoduUtil {
 					/*if(line.contains("ac.gif") || line.contains("em")){
 						if(flag && line.contains("<em>")){
 						  String pro = StringUtils.substringBetween(line, "<em>", "</em>");
-						  //System.out.println(pro);
+						  //logger.info(pro);
 						  problems.add(pro);
 						}
 						if(line.contains("ac.gif"))
@@ -132,7 +132,7 @@ public class JoduUtil {
 					if(line.contains("color-bg-1"))
 						 problems.add(StringUtils.substringBetween(line, "color-bg-1\">", "</span>"));
 					
-					 //System.out.println(line);
+					 //logger.info(line);
 				}
 			//}
 		}
@@ -179,7 +179,7 @@ public class JoduUtil {
 		List<Content> codes= new ArrayList<Content>();
 		PageData page = MyUtil.getPage("http://ac.jobdu.com/status.php?pid="+problem+"&user_id=%E4%BB%8E%E6%AD%A4%E9%86%89");
 		List<TableRow> rows = MyUtil.parseTags(page.html, TableRow.class, null, null);
-		//System.out.println(codes.get(0).getStringText());
+		//logger.info(codes.get(0).getStringText());
 		boolean Java = false, cpp = false;
 		for(TableRow row:rows){
 			String text = row.toHtml();
@@ -219,7 +219,7 @@ public class JoduUtil {
 		
 		List<PreTag> codes = MyUtil.parseTags(html, PreTag.class, "class", null);
 		text = codes.get(0).getStringText().replace("从此醉", "coder");
-		//System.out.println(text);
+		//logger.info(text);
 		Content content = new Content(text, true, string);
 		return content;
 	}
@@ -270,7 +270,7 @@ public class JoduUtil {
 			Thread.sleep(1000);
 			
 		}
-		//System.out.println(acPros.size());
+		//logger.info(acPros.size());
 	}
 	
 	private static void setTextPost(WpPosts wp, ProblemData pd) {

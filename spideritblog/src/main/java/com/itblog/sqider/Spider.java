@@ -9,15 +9,19 @@ import com.main.Main;
 import com.model.WpPosts;
 import com.model.WpTermTaxonomy;
 import com.util.ItblogInit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class Spider {
-	
+
+	private static Logger logger = LoggerFactory.getLogger(Spider.class);
+
 	public abstract WpPosts parseArticleSUrl(PageData page, String[] searchKeys);
 	
 	public abstract WpPosts getArticleSUrl(PageData page);
 	
 	public static void main(String[] args) {
-		System.out.println("HDU .1310".matches("HDU" + "[\\s-,.]*" + "1310") );
+//		logger.info("HDU .1310".matches("HDU" + "[\\s-,.]*" + "1310") );
 	}
 	public WpPosts parseArticleSUrl(PageData page, String[] searchKeys,
 			boolean isAddTag) {
@@ -54,8 +58,8 @@ public abstract class Spider {
 //			  title.contains("uva") ||
 //			  title.contains("zoj") ) ||
 //			  title.contains("pku") );
-//			//System.out.println("test rightTitle:" + title + "  <>  " + searchKeys[0]);
-//			//System.out.println(f);
+//			//logger.info("test rightTitle:" + title + "  <>  " + searchKeys[0]);
+//			//logger.info(f);
 //			return f;
 		}
 		
@@ -74,7 +78,7 @@ public abstract class Spider {
 		Set<WpTermTaxonomy> set = new HashSet<WpTermTaxonomy>();
 		
 		for(String key: ItblogInit.catKeySet){
-			//System.out.println("match key:" + key);
+			//logger.info("match key:" + key);
 			for(String contentKey:keys){
 				if(contentKey.toLowerCase().contains(key)){
 					addKey(keyCnt,  key,2);

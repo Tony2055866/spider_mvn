@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.model.WpPostmetaDAO;
 import com.model.WpPosts;
 import com.util.MyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SubmitComment {
-
+	private static Logger logger = LoggerFactory.getLogger(SubmitComment.class);
 	static String postapi = "http://api.duoshuo.com/posts/create.json";
 
 	public static void main(String[] args) {
@@ -19,7 +21,7 @@ public class SubmitComment {
 				MyUtil.getPage("http://gaotong.duoshuo.com/api/threads/" +
 						"list.json?short_name=gaotong&order=asc&limit=30&nonce=54a015668d940")
 				.html;
-		System.out.println(postsJson);
+		logger.info(postsJson);
 		Gson gons = new Gson();
 		PostResult pr = gons.fromJson(postsJson, PostResult.class);
 

@@ -105,7 +105,7 @@ public class MyUtil {
 		if(context == null)
 			context = new BasicHttpContext();
 		
-		//System.out.println(context + " " + client);
+		//logger.info(context + " " + client);
 		
 		HttpGet get = new HttpGet(url);
 		if(url.contains("google")){
@@ -134,12 +134,12 @@ public class MyUtil {
 			HttpHost host = (HttpHost) context.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
 			
 //			if(check && !checkHost(host.toString())){
-//System.out.println(host + "   没有spider，返回!" );
+//logger.info(host + "   没有spider，返回!" );
 //				return null;
 //			}
 			if(response.getStatusLine().getStatusCode() == 404){
-				System.out.println("404! ");
-				System.out.println(url);
+				logger.info("404! ");
+				logger.info(url);
 				return null;	
 			}
 			HttpEntity entity = response.getEntity();
@@ -153,7 +153,7 @@ public class MyUtil {
 					else if(url.contains("acm.hdu.edu") || url.contains("blog.51cto.com")) charset="gbk";
 					else charset="utf-8";
 				}
-				//System.out.println("charset:" + charset + "  ;  " + url );
+				//logger.info("charset:" + charset + "  ;  " + url );
 				BufferedReader br = null;
 				if(charset == null || charset == "")
 					 br = new BufferedReader(new InputStreamReader(entity
@@ -164,10 +164,10 @@ public class MyUtil {
 				String line = null;
 				while ((line = br.readLine()) != null) {
 					total += line+ "\n";
-					// System.out.println(line);
+					// logger.info(line);
 				}
 				
-//				System.out.println("charset: " + charset);
+//				logger.info("charset: " + charset);
 //				if(charset != null && !charset.toLowerCase().contains("utf")){
 //					total = new String(total.getBytes(charset), "utf-8");
 //				}
@@ -216,7 +216,7 @@ public class MyUtil {
 				@Override
 				public boolean accept(Node node) {
 					if(test)
-					 System.out.println(node.getClass());
+					 logger.info(node.getClass());
 					if(node.getClass() == tagType){
 						if(attr == null) return true;
 						T tn = (T)node;
@@ -225,7 +225,7 @@ public class MyUtil {
 							return true;
 						}
 						if(test)
-						 System.out.println(attrv);
+						 logger.info(attrv);
 						if(value != null && attrv != null && attrv.equals(value)) return true;
 					}
 					return false;
@@ -279,7 +279,7 @@ public class MyUtil {
 						T tn = (T)node;
 						String attrv = tn.getAttribute(attr);
 						if(node instanceof Div)
-							System.out.println(attrv);
+							logger.info(attrv);
 						if(value == null && attrv != null ){ //|| attrv.equals(value)
 							return true;
 						}
@@ -337,9 +337,12 @@ public class MyUtil {
 			char c = str.charAt(i);
 			if( (c >= 'a' && c <= 'z') || c == ' ' || c == '-' || (c >= '0' && c <= '9') )list.add(str.charAt(i));
 			else{
-				char last = list.get(list.size()-1);
-				if((last >= 'a' && last <= 'z') || (last >= '0' && last <= '9'))
-					list.add('-');
+				if(list.size() > 0){
+					char last = list.get(list.size()-1);
+					if((last >= 'a' && last <= 'z') || (last >= '0' && last <= '9'))
+						list.add('-');
+				}
+				
 			}
 			//if( !isChinese(str.charAt(i))) list.add(str.charAt(i));
 		}
@@ -379,8 +382,8 @@ public class MyUtil {
 			  title.contains("uva") ||
 			  title.contains("zoj") ) ||
 			  title.contains("pku") );
-			//System.out.println("test rightTitle:" + title + "  <>  " + searchKeys[0]);
-			//System.out.println(f);
+			//logger.info("test rightTitle:" + title + "  <>  " + searchKeys[0]);
+			//logger.info(f);
 			return f;
 		}
 		
@@ -393,9 +396,9 @@ public class MyUtil {
 	}
 	
 	public static void main(String[] args) {
-		//System.out.println( clearChinese("123你'好“hello-") );
-		//System.out.println("---adf--".replaceAll("-+","-" ));
-		//System.out.println(URLEncoder.encode(s));
+		//logger.info( clearChinese("123你'好“hello-") );
+		//logger.info("---adf--".replaceAll("-+","-" ));
+		//logger.info(URLEncoder.encode(s));
 	}
 	public static boolean rightTitle1(String title, String[] keys) {
 		title = title.toLowerCase();
@@ -455,7 +458,7 @@ String charset = null, total = "";
 		String line = null;
 		while ((line = br.readLine()) != null) {
 			total += line+ "\n";
-			// System.out.println(line);
+			// logger.info(line);
 		}
 	}
 return total;

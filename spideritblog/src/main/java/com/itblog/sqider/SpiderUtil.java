@@ -25,7 +25,7 @@ public class SpiderUtil {
 		Set<WpTermTaxonomy> set = new HashSet<WpTermTaxonomy>();
 		if(ItblogInit.catKeySet == null) ItblogInit.init();
 		for(String key: ItblogInit.catKeySet){
-			//System.out.println("match key:" + key);
+			//logger.info("match key:" + key);
 			if(keys != null){
 				for(String contentKey:keys){
 					if(contentKey.toLowerCase().contains(key)){

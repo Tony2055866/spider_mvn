@@ -26,10 +26,13 @@ import org.apache.http.util.EntityUtils;
 import org.htmlparser.tags.InputTag;
 
 import com.util.MyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IteyeAdmin {
-	
-	 HttpContext context;
+	private static Logger logger = LoggerFactory.getLogger(IteyeAdmin.class);
+
+	HttpContext context;
 	 HttpClient client;
 	 String keyToken;
 	 String nickname;
@@ -72,7 +75,7 @@ public class IteyeAdmin {
 		String key = null;
 		if(list.size()  > 0){
 			key = list.get(0).getAttribute("value");
-			System.out.println("key : " + key);
+			logger.info("key : " + key);
 			keyToken = key;
 		}
 		key.toString();
@@ -103,11 +106,11 @@ public class IteyeAdmin {
 			     String total = MyUtil.getStringFromResponse(response);
 			     if(check(total)) return false;
 			     
-			     System.out.println("---------after login -----");
-				System.out.println(total);
+			     logger.info("---------after login -----");
+				logger.info(total);
 				cookie = response.getHeaders("Set-Cookie");
 				for(int i=0; i<cookie.length; i++){
-					System.out.println("cokie :" + cookie[i]);
+					logger.info("cokie :" + cookie[i]);
 				}
 					 EntityUtils.consume(response.getEntity());
 			} catch (Exception e) {
@@ -137,7 +140,7 @@ public class IteyeAdmin {
 		HttpPost post = new HttpPost("http://"+ nickname +".iteye.com/admin/blogs");
 		 //构造最简单的字符串数据   
 	     StringEntity reqEntity;
-	     System.out.println("keyToken :" + keyToken);
+	     logger.info("keyToken :" + keyToken);
 		try {
 			reqEntity = new StringEntity("authenticity_token=" +
 					 URLEncoder.encode(keyToken) +
@@ -156,8 +159,8 @@ public class IteyeAdmin {
 			 
 			 HttpResponse response = client.execute(post, context);
 			 String total = MyUtil.getStringFromResponse(response);
-			 System.out.println("---------after submitArticle -----");
-				System.out.println(total);
+			 logger.info("---------after submitArticle -----");
+				logger.info(total);
 				if(check(total)) return ;
 				 EntityUtils.consume(response.getEntity());
 		} catch (Exception e) {

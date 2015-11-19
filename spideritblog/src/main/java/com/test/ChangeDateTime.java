@@ -10,11 +10,15 @@ import org.hibernate.Transaction;
 import com.model.WpPosts;
 import com.model.WpPostsDAO;
 import com.util.HibernateSessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Timestamp;
 
 import javax.management.Query;
 public class ChangeDateTime {
-	
+	private static Logger logger = LoggerFactory.getLogger(ChangeDateTime.class);
+
 	public static void main(String[] args) {
 		
 //		testupdateTime();
@@ -36,7 +40,6 @@ public class ChangeDateTime {
 			
 			Object[] userData = posts.get(i);
 			Timestamp tmp = (Timestamp) (userData[0]);
-			System.out.println(userData[0]);
 			//Timestamp tmp2 = (Timestamp) (userData[2]);
 			long postid = (Long)userData[4];
 			
@@ -65,7 +68,6 @@ public class ChangeDateTime {
 			org.hibernate.Query q = session.createQuery("update WpPosts post set " +
 					"post.postDate=?,post.postDateGmt=?,post.postModified=?,post.postModifiedGmt=? " +
 					"where post.id=?");
-			System.out.println(new Date(cur));
 			q.setTimestamp(0, new Date(cur));
 			q.setTimestamp(1,  new Date(cur2));
 			q.setTimestamp(2, new Date(cur));
@@ -73,13 +75,11 @@ public class ChangeDateTime {
 			q.setLong(4, postid);
 			q.executeUpdate();
 			tran.commit();
-			System.out.println(cur);
-			System.out.println(cnt  + "  UPDATE: " +  new Timestamp(cur) );
+			logger.info(cnt  + "  UPDATE: " +  new Timestamp(cur) );
 			
 		}
 		
 		
-		System.out.println(posts.size());
 	}
 
 	private static void testupdateTime() {

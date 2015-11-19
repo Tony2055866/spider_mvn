@@ -17,9 +17,14 @@ import com.model.WpPosts;
 import com.model.WpPostsDAO;
 import com.model.WpTermTaxonomy;
 import com.util.ItblogInit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class Main {
+
+	private static Logger logger = LoggerFactory.getLogger(Main.class);
+
 	static String chaps[] = {"","chapLinearList","chapString","chapStackAndQueue","chapTree",
 		"chapSorting","chapSearching","chapBruteforce","chapBFS","chapDFS","chapDivideAndConquer"
 		,"chapGreedy","chapDynamicProgramming","chapGraph","chapImplement"};
@@ -70,12 +75,12 @@ public class Main {
 				
 				while(s.hasNextLine()){
 					String line = s.nextLine();
-					//System.out.println(line);
+					//logger.info(line);
 					if(line.contains("label") && line.contains("sec:")){
 						title = StringUtils.substringBetween(preLine,"section{", "}");
 						url = "leetcode-" + StringUtils.substringBetween(line,"section{", "}");
 						url = URLEncoder.encode(url);
-						System.out.println(title);
+						logger.info(title);
 						curContent = "";
 						break;
 					}
@@ -88,16 +93,16 @@ public class Main {
 				//contents = new ArrayList<String>();
 				while(textScanner.hasNextLine()){
 					String tline = textScanner.nextLine();
-//					System.out.println("-------------------");
-//					System.out.println(tline);
+//					logger.info("-------------------");
+//					logger.info(tline);
 					if(tline.trim().equals("分析")){
 						txt = "";
 						while(true){
 							tline = textScanner.nextLine();
 							if(tline.trim().startsWith("//LeetCode")){
 								//contents.add(txt);
-								System.out.println("----------txt----------");
-								System.out.println(txt.substring(0, (txt.indexOf("代码")+txt.length())%txt.length()));
+								logger.info("----------txt----------");
+								logger.info(txt.substring(0, (txt.indexOf("代码")+txt.length())%txt.length()));
 								break;
 							}
 							txt += tline + "\n";
@@ -127,7 +132,7 @@ public class Main {
 					if(tline.trim().contains("相关题目")) break;
 				}
 				
-				System.out.println("codes.size() : " + codes.size());
+				logger.info("codes.size() : " + codes.size());
 				
 				//找相关题目
 				relates = new ArrayList<String>();

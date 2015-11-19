@@ -23,31 +23,37 @@ import com.model.WpPosts;
 import com.model.WpTermTaxonomy;
 import com.util.CodeUtil;
 import com.util.MyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SpiderIteye {
 	public static boolean debug = false;
-	
+
+
+	private static Logger logger = LoggerFactory.getLogger(SpiderIteye.class);
+
+
 	public WpPosts parseArticleSUrl(PageData page, boolean isAddTag) {
 		 String baseUrl ="http://blog.csdn.net";
 		 
 		 WpPosts post = new WpPosts();
 		 post.host = page.host;
 		try {
-			System.out.println("Spider4Csdn 开始解析:" + page.url);
+			logger.info("Spider4Csdn 开始解析:" + page.url);
 			Map<WpTermTaxonomy, Integer> keyCnt = new HashMap();
 			String title = getTitle(page);
 if(debug)
-	System.out.println("文章标题:" + title);
+	logger.info("文章标题:" + title);
 			if(title == null) return null;
 			
 			post.setPostTitle(title);
 
-//System.out.println("keys: " + keys.size());
+//logger.info("keys: " + keys.size());
 			
 			Div contentDiv = MyUtil.parseTags(page.html, Div.class, "class", "blog_content").get(0);
 //			contentDiv
 			String allString = contentDiv.getStringText();
-if(debug) System.out.println(contentDiv.toHtml());
+if(debug) logger.info(contentDiv.toHtml());
 
 			//if(allString.contains("问题描述")) return null;
 			//int power = checkTitle(title, searchKeys);
@@ -81,7 +87,7 @@ if(debug) System.out.println(contentDiv.toHtml());
 			post.hasCode = hasCode;
 			
 			post.url = page.url;
-			System.out.println("解析成功！！！！");
+			logger.info("解析成功！！！！");
 			return post;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -158,17 +164,17 @@ if(debug) System.out.println(contentDiv.toHtml());
 //		
 //		if(post != null){
 //			for(Content con:post.listContent){
-//			//	System.out.println(con.text + "\n --------------------");
+//			//	logger.info(con.text + "\n --------------------");
 //				String text = con.text.replaceAll("class=\"brush", "xxxxxbrush");
 //				text = text.replaceAll("class=\".+?\"", "");
 //				text = text.replaceAll("xxxxxbrush", "class=\"brush");
-//				System.out.println(text);
+//				logger.info(text);
 //			}
 //		}
 		SpiderIteye spider = new SpiderIteye();
 		List<String> urls = new SpiderIteye().getUrls();
 		for(String str:urls){
-		                System.out.println(str);
+		                logger.info(str);
 		                WpPosts post  = spider.parseUrl(str, true);
 		                try {
 							ItblogUtil.saveCommPost(post, false);

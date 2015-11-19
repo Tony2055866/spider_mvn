@@ -68,24 +68,24 @@ public class ItblogInit {
 						defautTerm = term;
 						Term_other = term;
 					}
-					//System.out.println(keyArr[i] + " -> " + term.getDescription());
+					//logger.info(keyArr[i] + " -> " + term.getDescription());
 				}
 			}
 		 }
-		 System.out.println("---------");
+		 logger.info("---------");
 		 List<WpTermTaxonomy> tagTerms = cateDao.getTagTerms();
-		 System.out.println(tagTerms.size());
+		 logger.info(tagTerms.size());
 
 		 for(WpTermTaxonomy term:tagTerms){
 			 tagTermTaxMap.put(term.getTerm().getName(), term);
 				String des = term.getDescription();
-//				System.out.println(term.getDescription());
+//				logger.info(term.getDescription());
 				des = des.trim().toLowerCase();
 				if(des != null && des != ""){
 					String keyArr[] = des.split(";");
 					for(int i=0; i<keyArr.length; i++){
 						tagTermTaxMap.put(keyArr[i], term);
-						//System.out.println(keyArr[i] + " -> " + term.getDescription());
+						//logger.info(keyArr[i] + " -> " + term.getDescription());
 					}
 				}
 		  }
@@ -98,7 +98,7 @@ public class ItblogInit {
 	
 	public static void main(String[] args) {
 		init();
-		System.out.println(Term_other);
+		logger.info(Term_other);
 	}
 
 }
