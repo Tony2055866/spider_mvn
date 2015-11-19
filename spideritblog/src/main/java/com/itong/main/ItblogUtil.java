@@ -53,7 +53,7 @@ public class ItblogUtil {
 			lastTime += (1000 * 60) * (random.nextInt(8) + 3) + random.nextInt(60000); //必须和上一篇相差 3分钟以上
 			postTime = lastTime;
 		}*/
-		long postTime = System.currentTimeMillis();
+		long postTime = System.currentTimeMillis() - 12 * 3600 * 1000;
 		Timestamp tm = new Timestamp(postTime);
 		Timestamp tm2 = new Timestamp(postTime -  60 * 8 * 60 * 1000);
 
