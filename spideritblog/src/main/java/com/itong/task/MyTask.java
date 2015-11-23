@@ -92,12 +92,9 @@ public abstract class MyTask extends Thread {
 							logger.error("sparse article error !!! , url: " + url);
 							e.printStackTrace();
 						}
-
 					}
 				}
 
-
-				
 				Thread.sleep(sleepTimeHours * 3600 * 1000); //按小时的休息
 				
 			}
@@ -111,8 +108,8 @@ public abstract class MyTask extends Thread {
 	private void deleteIndex() {
 		String path = ItblogInit.hostPath + "wp-content/cache/supercache/www.51itong.net/index.html";
 		File file = new File(path);
-		file.delete();
-		
+		boolean deleted = file.delete();
+		logger.info("");
 		MyUtil.getPage(ItblogInit.host);
 	}
 

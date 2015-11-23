@@ -143,7 +143,9 @@ public class ItblogUtil {
 				if(!post.visitedUrlMap.containsKey(url)){
 					replaceNoneUrl(post, url);
 				}else{
-					post.postContent = post.postContent.replaceAll("href=[\"']"+ url +"[\"']", "href=\"" + post.visitedUrlMap.get(url)+"\"");
+					post.postContent = post.postContent.replaceAll(url ,  post.visitedUrlMap.get(url));
+
+					//post.postContent = post.postContent.replaceAll("href=[\"']"+ url +"[\"']", "href=\"" + post.visitedUrlMap.get(url)+"\"");
 				}
 				continue;
 			}
