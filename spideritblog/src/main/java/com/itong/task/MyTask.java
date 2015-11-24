@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import com.util.DbUtil;
 import com.util.ItblogInit;
 import org.apache.log4j.Logger;
 import org.htmlparser.tags.Div;
@@ -64,6 +65,9 @@ public abstract class MyTask extends Thread {
 				if(urls != null){
 					for(String url:urls){
 						try {
+							if(DbUtil.checkUrl(url)){
+								continue;
+							}
 						while(!running) wait();
 						WpPosts post = null;
 
