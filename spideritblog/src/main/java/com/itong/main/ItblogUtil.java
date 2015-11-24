@@ -179,7 +179,7 @@ public class ItblogUtil {
 
 			if(post.visitedUrlMap.containsKey(url)){
 				logger.info("replace crawled url: " + url + " ; ->  to : " + post.visitedUrlMap.get(url));
-				post.postContent = post.postContent.replaceAll("href=[\"']"+ url +"[\"']", "href='" + post.visitedUrlMap.get(url)+"'");
+				post.postContent = post.postContent.replaceAll(url , post.visitedUrlMap.get(url));
 			}else{
 				replaceNoneUrl(post, url);
 			}
