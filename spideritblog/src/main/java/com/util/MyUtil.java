@@ -315,9 +315,9 @@ public class MyUtil {
 			t = t.replaceAll("-+", "-"); //替换掉重复的连接符
 			t = t.toLowerCase();
 			if(t.length() > 0){
-				while( ! checkWord( t.charAt(0))  )
+				while(t.length() > 0 &&  ! checkWord( t.charAt(0))  )
 					t = t.substring(1);
-				while( ! checkWord( t.charAt( t.length()-1 ))  )
+				while(t.length() > 0 &&  ! checkWord( t.charAt( t.length()-1 ))  )
 					t = t.substring(0, t.length()-1);
 			}
 			//t.replaceAll("", replacement)
@@ -415,8 +415,6 @@ public class MyUtil {
 	
 	/**
 	 * 
-	 * @param oj
-	 * @param pro
 	 * @return 从本地现存的文件中找答案
 	 */
 	
