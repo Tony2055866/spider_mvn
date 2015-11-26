@@ -139,7 +139,7 @@ public class ItblogUtil {
 
 			//visitedUrls 记录下所有访问过的
 			//visitedUrlMap 记录所有抓取过的
-			if(post.visitedUrls.contains(url)){
+			if(post.visitedUrls.contains(url) || DbUtil.checkUrl(url)){
 				if(!post.visitedUrlMap.containsKey(url)){
 					replaceNoneUrl(post, url);
 				}else{
